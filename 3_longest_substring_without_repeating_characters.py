@@ -21,6 +21,7 @@ class Solution:
         )
 
     def lengthOfLongestSubstring(self, s: str) -> int:
+        # Divide and Conquer
         max_len = 0
         candidate_stack = [s]
 
@@ -45,6 +46,54 @@ class Solution:
 
         return max_len
 
+    def lengthOfLongestSubstringV21(self, s: str) -> int:
+        # Two Pointers with Dict
+        max_len = 0
+        # latest index of each char
+        mapping = {}
+        left = 0
+        n = len(s)
+        right = 0
+        while right < n:
+            c = s[right]
+            c_lastest_index = mapping.get(c, -1)
+            if c_lastest_index >= left:  # duplicated char
+                if right - left > max_len:
+                    max_len = right - left
+                left = c_lastest_index + 1
+
+            mapping[c] = right
+            right += 1
+
+        # check for the last sub string
+        if right - left > max_len:
+            max_len = right - left
+
+        return max_len
+
+    def lengthOfLongestSubstringV22(self, s: str) -> int:
+        # Two Pointers with Dict
+        max_len = 0
+        # latest index of each char
+        mapping = {}
+        left = 0
+        n = len(s)
+
+        for right in range(n):
+            c = s[right]
+            c_lastest_index = mapping.get(c, -1)
+            if c_lastest_index >= left:  # duplicated char
+                if right - left > max_len:
+                    max_len = right - left
+                left = c_lastest_index + 1
+            mapping[c] = right
+
+        # check for the last sub string
+        if n - left > max_len:
+            max_len = n - left
+
+        return max_len
+
 
 s = "acabcscsbc"
 print(Solution.most_freq_char_indexs(s))
@@ -56,3 +105,15 @@ print(Solution.candidate_list(s, Solution.most_freq_char_indexs(s)))
 
 s = "acabcscsbc"
 print(Solution().lengthOfLongestSubstring(s))
+
+s = "acabccsbca"
+print(Solution().lengthOfLongestSubstringV21(s))
+
+s = ""
+print(Solution().lengthOfLongestSubstringV21(s))
+
+s = "acabccsbca"
+print(Solution().lengthOfLongestSubstringV22(s))
+
+s = ""
+print(Solution().lengthOfLongestSubstringV22(s))
