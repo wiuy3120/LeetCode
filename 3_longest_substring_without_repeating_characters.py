@@ -65,7 +65,7 @@ class Solution:
             mapping[c] = right
             right += 1
 
-        # check for the last sub string
+        # check for the last substring
         if right - left > max_len:
             max_len = right - left
 
@@ -88,7 +88,7 @@ class Solution:
                 left = c_lastest_index + 1
             mapping[c] = right
 
-        # check for the last sub string
+        # check for the last substring
         if n - left > max_len:
             max_len = n - left
 
