@@ -1,4 +1,4 @@
-.ONESHELL:
+# .ONESHELL:
 SHELL = /bin/bash
 PYTHON = python3.8
 VENV = lc_venv
@@ -14,6 +14,8 @@ venv:
 
 .PHONY: style
 style:
-	$(ENV_PREFIX)flake8 ${BUILD_DIR}
+	$(ENV_PREFIX)black ${BUILD_DIR}
 	$(ENV_PREFIX)isort ${BUILD_DIR}
-	$(ENV_PREFIX)black -l 79 ${BUILD_DIR}
+	$(ENV_PREFIX)flake8 ${BUILD_DIR}
+	
+	
