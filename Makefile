@@ -2,7 +2,7 @@
 SHELL = /bin/bash
 PYTHON = python3.8
 VENV = lc_venv
-BUILD_DIR = src
+BUILD_DIR = src playground
 
 # Python Virtual Enviroment
 .PHONY: venv
