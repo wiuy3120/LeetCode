@@ -1,3 +1,6 @@
+#include <iostream>
+#include <vector>
+
 class Solution
 {
 public:
@@ -34,3 +37,5 @@ public:
         return 0;
     }
 };
+
+
