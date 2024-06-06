@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 banned = [1, 6, 5]
 n = 5
 max_sum = 6
@@ -35,7 +37,6 @@ k = 5
 # left_set
 # left_pointer     0
 
-from collections import defaultdict
 
 def min_sub_arr(arr: list, k: int):
     # left = 0
@@ -43,8 +44,8 @@ def min_sub_arr(arr: list, k: int):
     counter = defaultdict(lambda: 0)
 
     min_len = len(arr)
-    for left in range(arr):
-        
+    for left in range(len(arr)):
+
         if left > 0 and counter[arr[left - 1]] == 1:
             del counter[arr[left - 1]]
         else:
@@ -64,12 +65,11 @@ def min_sub_arr(arr: list, k: int):
 # shop date, shop_id, revenue -> key: date, shop_id
 # top 3 date revenue
 
-SELECT shop_id, date, revenue
-FROM (
-    SELECT date, shop_id, revenue,
-        ROW_NUMBER() OVER(PARTITION BY shop_id ORDER BY revenue DESC) AS RN
-    FROM shop
-) AS A
-WHERE RN <= 3
-ORDER BY shop_id, date ASC
-
+# SELECT shop_id, date, revenue
+# FROM (
+#     SELECT date, shop_id, revenue,
+#         ROW_NUMBER() OVER(PARTITION BY shop_id ORDER BY revenue DESC) AS RN
+#     FROM shop
+# ) AS A
+# WHERE RN <= 3
+# ORDER BY shop_id, date ASC

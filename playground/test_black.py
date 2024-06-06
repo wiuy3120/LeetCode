@@ -1,3 +1,9 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+import pandas as pd
+
 # Test line length
 a_supa_long_name_variable_with_detailed_description = [
     "test",
@@ -6,11 +12,6 @@ a_supa_long_name_variable_with_detailed_description = [
     "79",
 ]
 a_short_var = ["test", "line", "length", "79"]
-
-
-import pandas as pd
-
-import numpy as np
 
 
 # Task 1
@@ -37,15 +38,13 @@ def handle_outliers(df: pd.DataFrame, column: str):
     upper_bound = Q3 + 1.5 * IQR
 
     # Remove outliers
-    return df[df[column] >= lower_bound & df[column] <= upper_bound]
+    return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
 
 
 for col in num_cols:
-    df = handle_outliers(df)
+    df = handle_outliers(df, col)
 
 summary = df.describe().loc[["mean", "50%", "std"]]
 
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 corr_matrix = df.c
