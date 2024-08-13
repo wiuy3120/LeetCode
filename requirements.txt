@@ -1,6 +1,6 @@
-black[jupyter]==24.3.0
-flake8==6.1.0
-isort==5.13.2
-sortedcontainers==2.4.0
-numpy==1.24.4
-pandas==2.0.3
+black[jupyter]
+flake8
+isort
+pandas
+sortedcontainers
+numpy
