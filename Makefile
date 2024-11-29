@@ -1,10 +1,10 @@
 # .ONESHELL:
 SHELL = /bin/bash
-PYTHON = python3.8
+PYTHON = python3.12
 VENV = lc_venv
 BUILD_DIR = src playground
 
-# Python Virtual Enviroment
+# Python Virtual Environment
 .PHONY: venv
 venv:
 	${PYTHON} -m venv ${VENV}
@@ -14,8 +14,6 @@ venv:
 
 .PHONY: style
 style:
-	$(ENV_PREFIX)black ${BUILD_DIR}
-	$(ENV_PREFIX)isort ${BUILD_DIR}
-	$(ENV_PREFIX)flake8 ${BUILD_DIR}
-	
-	
+	black ${BUILD_DIR} ; \
+	isort ${BUILD_DIR} ; \
+	flake8 ${BUILD_DIR}
