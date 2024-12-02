@@ -30,3 +30,12 @@ class Solution:
             num_set.add(num)
 
         return False
+
+    # 1455. Check If a Word Occurs As a Prefix of Any Word in a Sentence
+    def isPrefixOfWord(self, sentence: str, searchWord: str) -> int:
+        word_list = sentence.split(" ")
+        for i, word in enumerate(word_list):
+            if word.startswith(searchWord):
+                return i + 1
+
+        return -1
