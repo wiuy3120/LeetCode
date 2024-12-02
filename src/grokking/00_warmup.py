@@ -3,8 +3,14 @@ import bisect
 import math
 import random
 from collections import Counter, deque
-from heapq import (heapify, heappop, heappush, heappushpop, heapreplace,
-                   nlargest)
+from heapq import (
+    heapify,
+    heappop,
+    heappush,
+    heappushpop,
+    heapreplace,
+    nlargest,
+)
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
 
@@ -123,3 +129,40 @@ class Solution:
         if len(s) != len(t):
             return False
         return Counter(s) == Counter(t)
+
+    def shortestDistance(self, words, word1, word2):
+        res = len(words)
+        idx1 = len(words)
+        idx2 = len(words)
+
+        for i, word in enumerate(words):
+            if word == word1:
+                idx1 = i
+                res = min(res, abs(idx1 - idx2))
+            elif word == word2:
+                idx2 = i
+                res = min(res, abs(idx1 - idx2))
+
+        return res
+
+    def numIdenticalPairs(self, nums: List[int]) -> int:
+        return sum(
+            count * (count - 1) // 2 for count in Counter(nums).values()
+        )
+
+    def mySqrt(self, x: int) -> int:
+        hi = x
+        low = 0
+
+        while True:
+            mid = (hi + low) // 2
+            if mid * mid == x:
+                return mid
+            elif mid * mid > x:
+                hi = mid
+            elif (mid + 1) * (mid + 1) > x:
+                return mid
+            elif (mid + 1) * (mid + 1) == x:
+                return mid + 1
+            else:
+                low = mid + 1
