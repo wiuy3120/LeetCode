@@ -58,3 +58,32 @@ class Solution:
                 res = max(res, cur_sum)
 
         return res
+
+    # 2109. Adding Spaces to a String
+    def addSpaces(self, s: str, spaces: List[int]) -> str:
+        word_list = [s[: spaces[0]]]
+        for i in range(len(spaces) - 1):
+            word_list.append(s[spaces[i] : spaces[i + 1]])
+        word_list.append(s[spaces[-1] :])
+
+        return " ".join(word_list)
+
+    # 2825. Make String a Subsequence Using Cyclic Increments
+    def canMakeSubsequence(self, str1: str, str2: str) -> bool:
+        def increase_chart(chart: str):
+            if chart == "z":
+                return "a"
+            return chr(ord(chart) + 1)
+
+        if len(str1) < len(str2):
+            return False
+
+        n = len(str2)
+        idx = 0
+        for c in str1:
+            if c == str2[idx] or increase_chart(c) == str2[idx]:
+                idx += 1
+                if idx == n:
+                    return True
+
+        return False
