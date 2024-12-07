@@ -3,8 +3,14 @@ import bisect
 import math
 import random
 from collections import Counter, deque
-from heapq import (heapify, heappop, heappush, heappushpop, heapreplace,
-                   nlargest)
+from heapq import (
+    heapify,
+    heappop,
+    heappush,
+    heappushpop,
+    heapreplace,
+    nlargest,
+)
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
 
@@ -87,3 +93,25 @@ class Solution:
                     return True
 
         return False
+
+    # 2337. Move Pieces to Obtain a String
+    def canChange(self, start: str, target: str) -> bool:
+        start_indices = [
+            i + 1 if c == "L" else -i - 1
+            for i, c in enumerate(start)
+            if c in ["L", "R"]
+        ]
+        target_indices = [
+            i + 1 if c == "L" else -i - 1
+            for i, c in enumerate(target)
+            if c in ["L", "R"]
+        ]
+
+        if len(start_indices) != len(target_indices):
+            return False
+
+        for idx1, idx2 in zip(start_indices, target_indices):
+            if idx1 * idx2 < 0 or idx1 < idx2:
+                return False
+
+        return True
