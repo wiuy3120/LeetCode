@@ -87,9 +87,7 @@ class Solution:
                 elif count == half_len + 1:
                     left = max(
                         nums2[-2],
-                        nums1[
-                            self.leftClosestValueIndex(nums1, nums2[-1]) - 1
-                        ],
+                        nums1[self.leftClosestValueIndex(nums1, nums2[-1]) - 1],
                     )
                     right = nums2[-1]
                     return (left + right) / 2

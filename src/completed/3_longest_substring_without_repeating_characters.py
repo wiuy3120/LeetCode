@@ -36,9 +36,7 @@ class Solution:
             if len(set(candidate)) > max_len:
                 indexes = Solution.most_freq_char_indexs(candidate)
                 if len(indexes) > 1:
-                    candidate_list = Solution.candidate_list(
-                        candidate, indexes
-                    )
+                    candidate_list = Solution.candidate_list(candidate, indexes)
                     candidate_list = [
                         sub_str
                         for sub_str in candidate_list

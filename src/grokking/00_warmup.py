@@ -3,8 +3,7 @@ import bisect
 import math
 import random
 from collections import Counter, deque
-from heapq import (heapify, heappop, heappush, heappushpop, heapreplace,
-                   nlargest)
+from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
 
@@ -140,9 +139,7 @@ class Solution:
         return res
 
     def numIdenticalPairs(self, nums: List[int]) -> int:
-        return sum(
-            count * (count - 1) // 2 for count in Counter(nums).values()
-        )
+        return sum(count * (count - 1) // 2 for count in Counter(nums).values())
 
     def mySqrt(self, x: int) -> int:
         hi = x
