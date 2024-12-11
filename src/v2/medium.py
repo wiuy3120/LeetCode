@@ -2,7 +2,7 @@
 import bisect
 import math
 import random
-from collections import Counter, deque
+from collections import Counter, defaultdict, deque
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
@@ -197,3 +197,81 @@ class Solution:
             parts.append(part_counter)
 
         return [parts[start] == parts[end] for start, end in queries]
+
+    # 2981. Find Longest Special Substring That Occurs Thrice I
+    def maximumLength(self, s: str) -> int:
+        def has_special_substring(length: int):
+            counter = {}
+            for i in range(len(s) - length + 1):
+                substring = s[i : i + length]
+
+                count = counter.get(substring, 0)
+                if count == 2:
+                    return True
+                counter[substring] = count + 1
+            return False
+
+        left, right = 1, len(s) - 2
+        while left < right:
+            mid = (left + right + 1) // 2
+            if has_special_substring(mid):
+                left = mid
+            else:
+                right = mid - 1
+
+        return mid if has_special_substring(mid) else -1
+
+    def maximumLength(self, s: str) -> int:
+        counter = {s[0]: 1}
+        last_special_substring_len = 1
+        max_len = -1
+        for i in range(1, len(s)):
+            if s[i] != s[i - 1]:
+                substring = s[i]
+                count = counter.get(substring, 0)
+                if count == 2:
+                    max_len = max(max_len, 1)
+                counter[substring] = count + 1
+                continue
+
+            last_special_substring_len += 1
+            if last_special_substring_len <= max_len:
+                continue
+
+            for j in range(1, last_special_substring_len + 1):
+                substring = s[i] * j
+                count = counter.get(substring, 0)
+                if count == 2:
+                    max_len = max(max_len, j)
+                counter[substring] = count + 1
+
+        return max_len
+
+    # 2779. Maximum Beauty of an Array After Applying Operation
+    def maximumBeauty(self, nums: List[int], k: int) -> int:
+        min_num, max_num = min(nums), max(nums)
+        counter = [0] * (max_num - min_num + 1)
+
+        for num in nums:
+            counter[max(0, num - min_num - k)] += 1
+            if max_num - min_num >= num - min_num + k:
+                counter[num - min_num + k] -= 1
+
+        max_count = 0
+        acc_count = 0
+        for count in counter:
+            acc_count += count
+            max_count = max(max_count, acc_count)
+
+        return max_count
+
+    def maximumBeauty(self, nums: List[int], k: int) -> int:
+        min_num, max_num = min(nums), max(nums)
+        counter = [0] * (max_num - min_num + 1)
+
+        for num in nums:
+            counter[max(0, num - min_num - k)] += 1
+            if max_num - min_num >= num - min_num + k:
+                counter[num - min_num + k] -= 1
+
+        return max(accumulate(counter))
