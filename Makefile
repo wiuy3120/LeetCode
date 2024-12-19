@@ -14,6 +14,7 @@ venv:
 
 .PHONY: style
 style:
+	source ${VENV}/bin/activate && \
 	black ${BUILD_DIR} ; \
 	isort ${BUILD_DIR} ; \
 	flake8 ${BUILD_DIR}
