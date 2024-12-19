@@ -106,3 +106,25 @@ class Solution:
         fn(x)
         ans.reverse()
         return [[ans[i], ans[i + 1]] for i in range(len(ans) - 1)]
+
+    # [fav]
+    # 768. Max Chunks To Make Sorted II
+    def maxChunksToSorted(self, arr: List[int]) -> int:
+        # max_arr = list(accumulate(arr[:-1], max))
+        min_arr = list(accumulate(reversed(arr[1:]), min))
+        res = 1
+        for i, cur_max in enumerate(accumulate(arr[:-1], max)):
+            next_min = min_arr[-1 - i]
+            if cur_max <= next_min:
+                res += 1
+        return res
+
+    def maxChunksToSorted(self, arr: List[int]) -> int:
+        min_arr = list(accumulate(reversed(arr[1:]), min))
+        return (
+            sum(
+                cur_max <= min_arr[-1 - i]
+                for i, cur_max in enumerate(accumulate(arr[:-1], max))
+            )
+            + 1
+        )
