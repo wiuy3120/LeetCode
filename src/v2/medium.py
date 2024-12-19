@@ -306,3 +306,18 @@ class Solution:
                     marked_indices.add(min_idx - 1)
 
         return score
+
+    # 769. Max Chunks To Make Sorted
+    def maxChunksToSorted(self, arr: List[int]) -> int:
+        res = 0
+        cur_max = 0
+        for i, num in enumerate(arr):
+            cur_max = max(num, cur_max)
+            if i == cur_max:
+                res += 1
+        return res
+
+    def maxChunksToSorted(self, arr: List[int]) -> int:
+        return sum(
+            cur_max == i for i, cur_max in enumerate(accumulate(arr, max))
+        )
