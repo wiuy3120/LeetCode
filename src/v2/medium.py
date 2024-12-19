@@ -275,3 +275,34 @@ class Solution:
                 counter[num - min_num + k] -= 1
 
         return max(accumulate(counter))
+
+    # 2558. Take Gifts From the Richest Pile
+    def pickGifts(self, gifts: List[int], k: int) -> int:
+        nums = [-num for num in gifts]
+        heapify(nums)
+
+        for _ in range(k):
+            max_num = -nums[0]
+            heappushpop(gifts, -math.isqrt(max_num))
+
+        return sum(nums)
+
+    # 2593. Find Score of an Array After Marking All Elements
+    def findScore(self, nums: List[int]) -> int:
+        heap = [(num, i) for i, num in enumerate(nums)]
+        heapify(heap)
+        marked_indices = set()
+        n = len(nums)
+
+        score = 0
+        while len(marked_indices) < n:
+            min_num, min_idx = heappop(heap)
+            if min_idx not in marked_indices:
+                score += min_num
+                marked_indices.add(min_idx)
+                if min_idx + 1 < n:
+                    marked_indices.add(min_idx + 1)
+                if min_idx - 1 >= 0:
+                    marked_indices.add(min_idx - 1)
+
+        return score
