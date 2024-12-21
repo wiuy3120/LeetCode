@@ -12,6 +12,13 @@ from sortedcontainers import SortedList
 # Binary Search
 
 
+class TreeNode:
+    def __init__(self, val: int = 0, left=None, right=None):
+        self.val = val
+        self.left: TreeNode | None = left
+        self.right: TreeNode | None = right
+
+
 # 2070. Most Beautiful Item for Each Query
 class Solution:
     def maximumBeauty(
@@ -321,3 +328,70 @@ class Solution:
         return sum(
             cur_max == i for i, cur_max in enumerate(accumulate(arr, max))
         )
+
+    # [fav]
+    # 2415. Reverse Odd Levels of Binary Tree
+    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if root is None:
+            return root
+        if root.left is None:
+            return root
+
+        node_list: List[TreeNode] = [root.left, root.right]
+
+        while True:
+            for i in range(len(node_list) // 2):
+                node_list[i].val, node_list[-i - 1].val = (
+                    node_list[-i - 1].val,
+                    node_list[i].val,
+                )
+            if node_list[0].left is None or node_list[0].left.left is None:
+                break
+            new_node_list = []
+            for node in node_list:
+                new_node_list.extend(
+                    [
+                        node.left.left,
+                        node.left.right,
+                        node.right.left,
+                        node.right.right,
+                    ]
+                )
+            node_list = new_node_list
+        return root
+
+    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if root is None:
+            return root
+
+        def traverse(
+            left_node: TreeNode | None, right_node: TreeNode | None, level: int
+        ):
+            if left_node is None or right_node is None:
+                return
+            if (level % 2) != 0:
+                left_node.val, right_node.val = right_node.val, left_node.val
+            traverse(left_node.left, right_node.right, level + 1)
+            traverse(left_node.right, right_node.left, level + 1)
+
+        traverse(root.left, root.right, 1)
+        return root
+
+    def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        if root is None:
+            return root
+
+        def traverse(
+            left_node: TreeNode | None,
+            right_node: TreeNode | None,
+            is_odd: bool,
+        ):
+            if left_node is None or right_node is None:
+                return
+            if is_odd:
+                left_node.val, right_node.val = right_node.val, left_node.val
+            traverse(left_node.left, right_node.right, not is_odd)
+            traverse(left_node.right, right_node.left, not is_odd)
+
+        traverse(root.left, root.right, True)
+        return root
