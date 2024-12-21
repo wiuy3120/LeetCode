@@ -128,3 +128,33 @@ class Solution:
             )
             + 1
         )
+
+    # [fav]
+    # 2872. Maximum Number of K-Divisible Components
+    def maxKDivisibleComponents(
+        self, n: int, edges: List[List[int]], values: List[int], k: int
+    ) -> int:
+        adjacent_dict = {i: set() for i in range(n)}
+        for edge1, edge2 in edges:
+            adjacent_dict[edge1].add(edge2)
+            adjacent_dict[edge2].add(edge1)
+
+        stack = deque()
+        for node, adj_set in adjacent_dict.items():
+            if len(adj_set) == 1:
+                stack.append(node)
+
+        num_comps = 1
+        for _ in range(n - 1):
+            node = stack.pop()
+            adj_set = adjacent_dict[node]
+            node_value = values[node]
+            if node_value % k == 0:
+                num_comps += 1
+            adj_node = adj_set.pop()
+            values[adj_node] += node_value
+            adjacent_dict[adj_node].remove(node)
+            if len(adjacent_dict[adj_node]) == 1:
+                stack.append(adj_node)
+
+        return num_comps
