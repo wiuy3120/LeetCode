@@ -395,3 +395,31 @@ class Solution:
 
         traverse(root.left, root.right, True)
         return root
+
+    # 2471. Minimum Number of Operations to Sort a Binary Tree by Level
+    def minimumOperations(self, root: Optional[TreeNode]) -> int:
+        def min_swap(nums: List[int]):
+            sorted_nums = sorted([(num, i) for i, num in enumerate(nums)])
+            num_swaps = 0
+            for i in range(len(sorted_nums)):
+                _, idx = sorted_nums[i]
+                while idx != i:
+                    sorted_nums[i], sorted_nums[idx] = (
+                        sorted_nums[idx],
+                        sorted_nums[i],
+                    )
+                    num_swaps += 1
+                    _, idx = sorted_nums[i]
+            return num_swaps
+
+        min_ops = 0
+        node_list = [root]
+        while len(node_list) > 0:
+            min_ops += min_swap([node.val for node in node_list])
+            node_list = [
+                child
+                for node in node_list
+                for child in [node.left, node.right]
+                if child is not None
+            ]
+        return min_ops
