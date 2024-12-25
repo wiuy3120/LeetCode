@@ -423,3 +423,132 @@ class Solution:
                 if child is not None
             ]
         return min_ops
+
+    # 3203. Find Minimum Diameter After Merging Two Trees
+    def minimumDiameterAfterMerge(
+        self, edges1: List[List[int]], edges2: List[List[int]]
+    ) -> int:
+        def get_diameter(edges: List[List[int]]):
+            connected_dict = {i: set() for i in range(len(edges) + 1)}
+
+            for u, v in edges:
+                connected_dict[u].add(v)
+                connected_dict[v].add(u)
+
+            counter = 0
+            leaf_list = [
+                (edge, connected_set.pop())
+                for edge, connected_set in connected_dict.items()
+                if len(connected_set) == 1
+            ]
+            while len(leaf_list) > 0:
+                counter += 1
+                for leaf, parent in leaf_list:
+                    connected_dict.get(parent, set()).discard(leaf)
+                    connected_dict.pop(leaf)
+                leaf_list = [
+                    (edge, connected_set.pop())
+                    for edge, connected_set in connected_dict.items()
+                    if len(connected_set) == 1
+                ]
+            print(counter)
+            return counter * 2 - (len(connected_dict) == 0)
+
+        def farthest_node(
+            start: int, connected_dict: Dict[int, List[int]]
+        ) -> Tuple[int, int]:
+            visited = set()
+            visited.add(start)
+            max_distance = 0
+            farthest = start
+            stack = deque([(start, 0)])
+            while len(stack) > 0:
+                node, distance = stack.pop()
+                if distance > max_distance:
+                    max_distance = distance
+                    farthest = node
+                for neighbor in connected_dict[node]:
+                    if neighbor not in visited:
+                        visited.add(neighbor)
+                        stack.append((neighbor, distance + 1))
+            return farthest, max_distance
+
+        def get_diameter(edges: List[List[int]]):
+            n = len(edges) + 1
+            if n <= 2:
+                return n - 1
+
+            connected_dict = [[] for _ in range(n)]
+            for u, v in edges:
+                connected_dict[u].append(v)
+                connected_dict[v].append(u)
+
+            farthest, _ = farthest_node(0, connected_dict)
+            _, max_distance = farthest_node(farthest, connected_dict)
+            return max_distance
+
+        def get_diameter(edges: List[List[int]]):
+            n = len(edges) + 1
+            if n <= 2:
+                return n - 1
+
+            graph = [[] for _ in range(n)]
+            degree = [0] * n
+            for v, w in edges:
+                graph[v].append(w)
+                graph[w].append(v)
+                degree[v] += 1
+                degree[w] += 1
+
+            leaves = deque(v for v in range(n) if degree[v] == 1)
+            tree_size = n
+            radius = 0
+            while tree_size > 2:
+                for _ in range(len(leaves)):
+                    leaf = leaves.popleft()
+                    tree_size -= 1
+                    degree[leaf] -= 1
+                    for nxt in graph[leaf]:
+                        degree[nxt] -= 1
+                        if degree[nxt] == 1:
+                            leaves.append(nxt)
+                radius += 1
+
+            return 2 * radius + (tree_size == 2)
+
+        dia1, dia2 = get_diameter(edges1), get_diameter(edges2)
+
+        return max(dia1, dia2, (dia1 + 1) // 2 + (dia2 + 1) // 2 + 1)
+
+
+if __name__ == "__main__":
+    solution = Solution()
+    edges1 = [[0, 1], [0, 2], [0, 3]]
+    edges2 = [[0, 1]]
+    print(solution.minimumDiameterAfterMerge(edges1, edges2))
+    edges1 = [[3, 0], [2, 1], [2, 3]]
+    edges2 = [
+        [0, 1],
+        [0, 4],
+        [3, 5],
+        [6, 3],
+        [7, 6],
+        [2, 7],
+        [0, 2],
+        [8, 0],
+        [8, 9],
+    ]
+    print(solution.minimumDiameterAfterMerge(edges1, edges2))
+    edges1 = [
+        [0, 1],
+        [2, 0],
+        [3, 2],
+        [3, 6],
+        [8, 7],
+        [4, 8],
+        [5, 4],
+        [3, 5],
+        [3, 9],
+    ]
+    edges2 = [[0, 1], [0, 2], [0, 3]]
+    print(solution.minimumDiameterAfterMerge(edges1, edges2))
