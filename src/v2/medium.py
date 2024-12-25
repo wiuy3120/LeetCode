@@ -520,6 +520,23 @@ class Solution:
 
         return max(dia1, dia2, (dia1 + 1) // 2 + (dia2 + 1) // 2 + 1)
 
+    # 515. Find Largest Value in Each Tree Row
+    def largestValues(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        if root is None:
+            return res
+
+        node_list = [root]
+        while len(node_list) > 0:
+            res.append(max(node.val for node in node_list))
+            node_list = [
+                child
+                for node in node_list
+                for child in [node.left, node.right]
+                if child is not None
+            ]
+        return res
+
 
 if __name__ == "__main__":
     solution = Solution()
