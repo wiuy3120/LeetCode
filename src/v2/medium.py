@@ -537,6 +537,18 @@ class Solution:
             ]
         return res
 
+    # 2559. Count Vowel Strings in Ranges
+    def vowelStrings(
+        self, words: List[str], queries: List[List[int]]
+    ) -> List[int]:
+        def is_vowel_string(word: str):
+            return (word[0] in "aeiou") and (word[-1] in "aeiou")
+
+        counter = [0] + list(
+            accumulate([is_vowel_string(word) for word in words])
+        )
+        return [counter[end + 1] - counter[start] for start, end in queries]
+
 
 if __name__ == "__main__":
     solution = Solution()
