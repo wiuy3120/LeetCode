@@ -549,6 +549,11 @@ class Solution:
         )
         return [counter[end + 1] - counter[start] for start, end in queries]
 
+    # 2270. Number of Ways to Split Array
+    def waysToSplitArray(self, nums: List[int]) -> int:
+        total = sum(nums)
+        return sum(2 * acc >= total for acc in accumulate(nums[:-1]))
+
 
 if __name__ == "__main__":
     solution = Solution()
