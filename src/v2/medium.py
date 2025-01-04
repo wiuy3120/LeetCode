@@ -554,6 +554,96 @@ class Solution:
         total = sum(nums)
         return sum(2 * acc >= total for acc in accumulate(nums[:-1]))
 
+    # 1930. Unique Length-3 Palindromic Subsequences
+    def countPalindromicSubsequence(self, s: str) -> int:
+        char_pos_dict = {}
+        for i, char in enumerate(s):
+            if char not in char_pos_dict:
+                char_pos_dict[char] = [i, i]
+            else:
+                char_pos_dict[char][1] = i
+
+        res = 0
+        for start, end in char_pos_dict.values():
+            res += len(set(s[start + 1 : end]))
+
+        return res
+
+    def countPalindromicSubsequence(self, s: str) -> int:
+        letters = "abcdefghijklmnopqrstuvwxyz"
+        res = 0
+
+        for char in letters:
+            start = s.find(char)
+            if start == -1:
+                continue
+            end = s.rfind(char)
+            if start >= end:
+                continue
+
+            v = [False] * 128
+            distinct_count = 0
+            for i in range(start + 1, end):
+                if not v[ord(s[i])]:
+                    v[ord(s[i])] = True
+                    distinct_count += 1
+                    if distinct_count == 26:
+                        break
+            res += distinct_count
+        return res
+
+    def countPalindromicSubsequence(self, s: str) -> int:
+        char_pos_dict = {}
+        for i, char in enumerate(s):
+            if char not in char_pos_dict:
+                char_pos_dict[char] = [i, i]
+            else:
+                char_pos_dict[char][1] = i
+
+        def distinct_char(start: int, end: int, s: str) -> int:
+            visited = [False] * 26
+            count = 0
+            for char in s[start + 1 : end]:
+                if visited[ord(char) - ord("a")]:
+                    continue
+                visited[ord(char) - ord("a")] = True
+                count += 1
+                if count == 26:
+                    return 26
+            return count
+
+        res = 0
+        for start, end in char_pos_dict.values():
+            res += distinct_char(start, end, s)
+        return res
+
+    def countPalindromicSubsequence(self, s: str) -> int:
+        char_range = [None] * 26
+        for i, char in enumerate(s):
+            idx = ord(char) - ord("a")
+            if char_range[idx] is None:
+                char_range[idx] = [i, i]
+            else:
+                char_range[idx][1] = i
+
+        def distinct_char(start: int, end: int, s: str) -> int:
+            visited = [False] * 26
+            count = 0
+            for char in s[start + 1 : end]:
+                if visited[ord(char) - ord("a")]:
+                    continue
+                visited[ord(char) - ord("a")] = True
+                count += 1
+                if count == 26:
+                    return 26
+            return count
+
+        return sum(
+            distinct_char(range[0], range[1], s)
+            for range in char_range
+            if range is not None
+        )
+
 
 if __name__ == "__main__":
     solution = Solution()
