@@ -644,6 +644,22 @@ class Solution:
             if range is not None
         )
 
+    # 2381. Shifting Letters II
+    def shiftingLetters(self, s: str, shifts: List[List[int]]) -> str:
+        def shift_char(char: str, shift: int) -> str:
+            return chr((ord(char) - ord("a") + shift) % 26 + ord("a"))
+
+        shift_count = [0] * (len(s) + 1)
+        for start, end, direction in shifts:
+            shift = 1 if direction == 1 else -1
+            shift_count[start] += shift
+            shift_count[end + 1] -= shift
+
+        return "".join(
+            shift_char(char, shift)
+            for char, shift in zip(s, accumulate(shift_count[:-1]))
+        )
+
 
 if __name__ == "__main__":
     solution = Solution()
