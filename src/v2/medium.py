@@ -660,6 +660,15 @@ class Solution:
             for char, shift in zip(s, accumulate(shift_count[:-1]))
         )
 
+    # 1769. Minimum Number of Operations to Move All Balls to Each Box
+    def minOperations(self, boxes: str) -> List[int]:
+        moves = [0 if char == "0" else 1 for char in boxes]
+        left_moves = accumulate([0] + list(accumulate(moves[:-1])))
+        right_moves = list(accumulate([0] + list(accumulate(moves[:0:-1]))))[
+            ::-1
+        ]
+        return [left + right for left, right in zip(left_moves, right_moves)]
+
 
 if __name__ == "__main__":
     solution = Solution()
