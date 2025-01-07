@@ -68,3 +68,8 @@ class Solution:
             max_score = max(max_score, 2 * zero_counter - i - 1)
         one_counter += 1 if s[-1] == "1" else 0
         return max_score + one_counter
+
+    # 1408. String Matching in an Array
+    def stringMatching(self, words: List[str]) -> List[str]:
+        sentence = " ".join(words)
+        return [word for word in words if sentence.count(word) > 1]
