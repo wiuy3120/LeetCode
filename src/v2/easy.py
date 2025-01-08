@@ -73,3 +73,14 @@ class Solution:
     def stringMatching(self, words: List[str]) -> List[str]:
         sentence = " ".join(words)
         return [word for word in words if sentence.count(word) > 1]
+
+    # 3042. Count Prefix and Suffix Pairs I
+    def countPrefixSuffixPairs(self, words: List[str]) -> int:
+        def is_presuffix(str1: str, str2: str):
+            return str2.startswith(str1) and str2.endswith(str1)
+
+        return sum(
+            is_presuffix(str1, str2)
+            for i, str1 in enumerate(words[:-1])
+            for str2 in words[i + 1 :]
+        )
