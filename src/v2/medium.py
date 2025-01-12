@@ -660,14 +660,49 @@ class Solution:
             for char, shift in zip(s, accumulate(shift_count[:-1]))
         )
 
-    # 1769. Minimum Number of Operations to Move All Balls to Each Box
-    def minOperations(self, boxes: str) -> List[int]:
-        moves = [0 if char == "0" else 1 for char in boxes]
-        left_moves = accumulate([0] + list(accumulate(moves[:-1])))
-        right_moves = list(accumulate([0] + list(accumulate(moves[:0:-1]))))[
-            ::-1
-        ]
-        return [left + right for left, right in zip(left_moves, right_moves)]
+    # 2185. Counting Words With a Given Prefix
+    def prefixCount(self, words: List[str], pref: str) -> int:
+        return sum(1 for word in words if word.startswith(pref))
+
+    # 2116. Check if a Parentheses String Can Be Valid
+    def canBeValid(self, s: str, locked: str) -> bool:
+        if len(s) % 2 != 0:
+            return False
+
+        if locked[-1] == "1" and s[-1] == "(":
+            return False
+
+        locked_stack = deque()
+        unlocked_stack = deque()
+        for i, char in enumerate(s):
+            if locked[i] == "0":
+                unlocked_stack.append(i)
+                continue
+            if char == "(":
+                locked_stack.append(i)
+                continue
+            if len(locked_stack) > 0:
+                locked_stack.pop()
+                continue
+            if len(unlocked_stack) == 0:
+                return False
+            unlocked_stack.pop()
+
+        # while len(locked_stack) > 0:
+        #     if len(unlocked_stack) == 0:
+        #         return False
+        #     if locked_stack.pop() > unlocked_stack.pop():
+        #         return False
+        # return True
+
+        while (
+            len(locked_stack) > 0
+            and len(unlocked_stack) > 0
+            and locked_stack[-1] < unlocked_stack[-1]
+        ):
+            locked_stack.pop()
+            unlocked_stack.pop()
+        return len(locked_stack) == 0
 
 
 if __name__ == "__main__":
