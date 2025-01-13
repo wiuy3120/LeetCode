@@ -704,6 +704,49 @@ class Solution:
             unlocked_stack.pop()
         return len(locked_stack) == 0
 
+    # 3223. Minimum Length of String After Operations
+    def minimumLength(self, s: str) -> int:
+        return sum(1 + (count + 1) % 2 for count in Counter(s).values())
+
+    def minimumLength(self, s: str) -> int:
+        return sum(1 if count & 1 else 2 for count in Counter(s).values())
+
+    def minimumLength(self, s: str) -> int:
+        char_set = {
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+        }
+        res = 0
+        for char in char_set:
+            count = s.count(char)
+            if count > 0:
+                res += 1 if count & 1 else 2
+        return res
+
 
 if __name__ == "__main__":
     solution = Solution()
