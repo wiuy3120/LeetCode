@@ -747,6 +747,31 @@ class Solution:
                 res += 1 if count & 1 else 2
         return res
 
+    # 2657. Find the Prefix Common Array of Two Arrays
+    def findThePrefixCommonArray(self, A: List[int], B: List[int]) -> List[int]:
+        appeared = [False] * len(A)
+        common_counter = [0] * len(A)
+        for i, (num1, num2) in enumerate(zip(A, B)):
+            if appeared[num1 - 1]:
+                common_counter[i] += 1
+            else:
+                appeared[num1 - 1] = True
+
+            if appeared[num2 - 1]:
+                common_counter[i] += 1
+            else:
+                appeared[num2 - 1] = True
+        return list(accumulate(common_counter))
+
+    def findThePrefixCommonArray(self, A: List[int], B: List[int]) -> List[int]:
+        num_set = set()
+        common_counter = [0] * len(A)
+        for i, (num1, num2) in enumerate(zip(A, B)):
+            num_set.add(num1)
+            num_set.add(num2)
+            common_counter[i] = 2 * (i + 1) - len(num_set)
+        return common_counter
+
 
 if __name__ == "__main__":
     solution = Solution()
