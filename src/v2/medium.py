@@ -772,6 +772,25 @@ class Solution:
             common_counter[i] = 2 * (i + 1) - len(num_set)
         return common_counter
 
+    # 2429. Minimize XOR
+    def minimizeXor(self, num1: int, num2: int) -> int:
+        ones = sum(int(bit) for bit in bin(num2)[2:])
+        if ones >= len(bin(num1)[2:]):
+            return (2 << (ones - 1)) - 1
+        res_bin = ""
+        num1_bin = bin(num1)[2:]
+        for i, bit in enumerate(num1_bin):
+            if ones >= (len(num1_bin) - i):
+                break
+            if ones == 0:
+                res_bin += "0"
+                continue
+            if bit == "1":
+                ones -= 1
+            res_bin += bit
+        res_bin += "1" * ones
+        return int(res_bin, 2)
+
 
 if __name__ == "__main__":
     solution = Solution()
