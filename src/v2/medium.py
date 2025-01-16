@@ -1,8 +1,10 @@
 # pyright: reportRedeclaration=false
 import bisect
 import math
+import operator
 import random
 from collections import Counter, defaultdict, deque
+from functools import reduce
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
@@ -790,6 +792,17 @@ class Solution:
             res_bin += bit
         res_bin += "1" * ones
         return int(res_bin, 2)
+
+    # 2425. Bitwise XOR of All Pairings
+    def xorAllNums(self, nums1: List[int], nums2: List[int]) -> int:
+        res = reduce(operator.xor, nums1) if len(nums2) % 2 == 1 else 0
+        res ^= reduce(operator.xor, nums2) if len(nums1) % 2 == 1 else 0
+        return res
+
+    def xorAllNums(self, nums1: List[int], nums2: List[int]) -> int:
+        return (reduce(operator.xor, nums1) if len(nums2) % 2 == 1 else 0) ^ (
+            reduce(operator.xor, nums2) if len(nums1) % 2 == 1 else 0
+        )
 
 
 if __name__ == "__main__":
