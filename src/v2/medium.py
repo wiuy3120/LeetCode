@@ -804,6 +804,13 @@ class Solution:
             reduce(operator.xor, nums2) if len(nums1) % 2 == 1 else 0
         )
 
+    # 2683. Neighboring Bitwise XOR
+    def doesValidArrayExist(self, derived: List[int]) -> bool:
+        # return reduce(operator.xor, derived) == 0
+        # return sum(derived) & 1 == 0
+        # return sum(derived) % 2 == 0
+        return derived.count(1) & 1 == 0
+
 
 if __name__ == "__main__":
     solution = Solution()
