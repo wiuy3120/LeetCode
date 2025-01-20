@@ -811,6 +811,46 @@ class Solution:
         # return sum(derived) % 2 == 0
         return derived.count(1) & 1 == 0
 
+    # 2661. First Completely Painted Row or Column
+    def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+        # all dict
+        m, n = len(mat), len(mat[0])
+        index_dict = {
+            mat[row][col]: (row, col) for row in range(m) for col in range(n)
+        }
+
+        row_counter = Counter()
+        col_counter = Counter()
+        for i, num in enumerate(arr):
+            row, col = index_dict[num]
+            row_counter[row] += 1
+            if row_counter[row] == n:
+                return i
+            col_counter[col] += 1
+            if col_counter[col] == m:
+                return i
+        return -1
+
+    def firstCompleteIndex(self, arr: List[int], mat: List[List[int]]) -> int:
+        # all list
+        m, n = len(mat), len(mat[0])
+
+        index_list = [None] * (m * n)
+        for row in range(m):
+            for col in range(n):
+                index_list[mat[row][col] - 1] = (row, col)
+
+        row_counter = [0] * m
+        col_counter = [0] * n
+        for i, num in enumerate(arr):
+            row, col = index_list[num - 1]
+            row_counter[row] += 1
+            if row_counter[row] == n:
+                return i
+            col_counter[col] += 1
+            if col_counter[col] == m:
+                return i
+
 
 if __name__ == "__main__":
     solution = Solution()
