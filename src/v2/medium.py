@@ -851,6 +851,20 @@ class Solution:
             if col_counter[col] == m:
                 return i
 
+    # 2017. Grid Game
+    def gridGame(self, grid: List[List[int]]) -> int:
+        if len(grid[0]) == 1:
+            return 0
+        if len(grid[0]) == 2:
+            return min(grid[0][1], grid[1][0])
+        top_acc = list(accumulate(grid[0][:0:-1]))[::-1]
+        bot_acc = list(accumulate(grid[1][:-1]))
+        return min(
+            top_acc[0],
+            bot_acc[-1],
+            min(max(top, bot) for top, bot in zip(top_acc[1:], bot_acc[:-1])),
+        )
+
 
 if __name__ == "__main__":
     solution = Solution()
