@@ -865,6 +865,35 @@ class Solution:
             min(max(top, bot) for top, bot in zip(top_acc[1:], bot_acc[:-1])),
         )
 
+    # 1765. Map of Highest Peak
+    def highestPeak(self, isWater: List[List[int]]) -> List[List[int]]:
+        def get_adjacent_cells(row: int, col: int):
+            for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                new_row, new_col = row + dr, col + dc
+                if 0 <= new_row < m and 0 <= new_col < n:
+                    yield new_row, new_col
+
+        m, n = len(isWater), len(isWater[0])
+        visited = [[False] * n for _ in range(m)]
+        queue = deque()
+        for row in range(m):
+            for col in range(n):
+                if isWater[row][col] == 1:
+                    queue.append((row, col))
+                    visited[row][col] = True
+
+        height = [[0] * n for _ in range(m)]
+        while len(queue) > 0:
+            row, col = queue.popleft()
+            current_height = height[row][col]
+            visited[row][col] = True
+            for new_row, new_col in get_adjacent_cells(row, col):
+                if not visited[new_row][new_col]:
+                    height[new_row][new_col] = current_height + 1
+                    visited[new_row][new_col] = True
+                    queue.append((new_row, new_col))
+        return height
+
 
 if __name__ == "__main__":
     solution = Solution()
