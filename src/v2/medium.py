@@ -894,6 +894,45 @@ class Solution:
                     queue.append((new_row, new_col))
         return height
 
+    # 1267. Count Servers that Communicate
+    def countServers(self, grid: List[List[int]]) -> int:
+        n = len(grid[0])
+        col_counter = [0] * n
+        potentially_unconnected_cols = [False] * n
+
+        total_servers = 0
+        for row in grid:
+            server_indices = [i for i, server in enumerate(row) if server == 1]
+            total_servers += len(server_indices)
+            if len(server_indices) == 0:
+                continue
+            if len(server_indices) == 1:
+                potentially_unconnected_cols[server_indices[0]] = True
+            for col in server_indices:
+                col_counter[col] += 1
+
+        return total_servers - sum(
+            1
+            for has_not_connected_yet, counter in zip(
+                potentially_unconnected_cols, col_counter
+            )
+            if has_not_connected_yet and (counter == 1)
+        )
+
+    def countServers(self, grid: List[List[int]]) -> int:
+        counter = 0
+        for row in grid:
+            num_servers = sum(row)
+            if num_servers == 0:
+                continue
+            if num_servers > 1:
+                counter += num_servers
+                continue
+            col = row.index(1)
+            if sum(grid[row][col] for row in range(len(grid))) > 1:
+                counter += 1
+        return counter
+
 
 if __name__ == "__main__":
     solution = Solution()
