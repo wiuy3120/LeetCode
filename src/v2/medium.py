@@ -933,6 +933,32 @@ class Solution:
                 counter += 1
         return counter
 
+    # 2948. Make Lexicographically Smallest Array by Swapping Elements
+    def lexicographicallySmallestArray(
+        self, nums: List[int], limit: int
+    ) -> List[int]:
+        n = len(nums)
+        sorted_indices, sorted_nums = zip(
+            *sorted(enumerate(nums), key=operator.itemgetter(1))
+        )
+        res = [0] * n
+        cur_group_index = 0
+        for i in range(n - 1):
+            if sorted_nums[i + 1] - sorted_nums[i] > limit:
+                new_group = sorted_nums[cur_group_index : i + 1]
+                new_group_indices = sorted(
+                    sorted_indices[cur_group_index : i + 1]
+                )
+                for index, num in zip(new_group_indices, new_group):
+                    res[index] = num
+                cur_group_index = i + 1
+        for index, num in zip(
+            sorted(sorted_indices[cur_group_index:]),
+            sorted_nums[cur_group_index:],
+        ):
+            res[index] = num
+        return res
+
 
 if __name__ == "__main__":
     solution = Solution()
