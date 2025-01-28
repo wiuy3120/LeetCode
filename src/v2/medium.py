@@ -959,6 +959,110 @@ class Solution:
             res[index] = num
         return res
 
+    # 2658. Maximum Number of Fish in a Grid
+    def findMaxFish(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        visited = [[False] * n for _ in range(m)]
+        zero_queue = deque()
+
+        def adj_cells(row: int, col: int):
+            for dr, dc in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+                new_row, new_col = row + dr, col + dc
+                if (
+                    0 <= new_row < m
+                    and 0 <= new_col < n
+                    and not visited[new_row][new_col]
+                ):
+                    yield new_row, new_col
+
+        def dfs(row: int, col: int):
+            queue = deque([(row, col)])
+            visited[row][col] = True
+            num_fish = 0
+            while len(queue) > 0:
+                row, col = queue.pop()
+                num_fish += grid[row][col]
+                for new_row, new_col in adj_cells(row, col):
+                    visited[new_row][new_col] = True
+                    if grid[new_row][new_col] == 0:
+                        zero_queue.append((new_row, new_col))
+                    else:
+                        queue.append((new_row, new_col))
+            return num_fish
+
+        visited[0][0] = True
+        if grid[0][0] == 0:
+            zero_queue.append((0, 0))
+            max_fish = 0
+        else:
+            max_fish = dfs(0, 0)
+
+        while len(zero_queue) > 0:
+            row, col = zero_queue.pop()
+
+            for new_row, new_col in adj_cells(row, col):
+                if grid[new_row][new_col] == 0:
+                    visited[new_row][new_col] = True
+                    zero_queue.append((new_row, new_col))
+                else:
+                    max_fish = max(max_fish, dfs(new_row, new_col))
+
+        return max_fish
+
+    def findMaxFish(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+
+        def dfs(row: int, col: int):
+            if not (0 <= row < m and 0 <= col < n):
+                return 0
+            if grid[row][col] == 0:
+                return 0
+            value = grid[row][col]
+            grid[row][col] = 0
+            return (
+                value
+                + dfs(row + 1, col)
+                + dfs(row - 1, col)
+                + dfs(row, col + 1)
+                + dfs(row, col - 1)
+            )
+
+        max_fish = 0
+        for row in range(m):
+            for col in range(n):
+                if grid[row][col] == 0:
+                    continue
+                max_fish = max(max_fish, dfs(row, col))
+        return max_fish
+
+    def findMaxFish(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        visited = [[False] * n for _ in range(m)]
+
+        def dfs(row: int, col: int):
+            if not (0 <= row < m and 0 <= col < n):
+                return 0
+            if visited[row][col]:
+                return 0
+            visited[row][col] = True
+            if (value := grid[row][col]) == 0:
+                return 0
+            return (
+                value
+                + dfs(row + 1, col)
+                + dfs(row - 1, col)
+                + dfs(row, col + 1)
+                + dfs(row, col - 1)
+            )
+
+        max_fish = 0
+        for row in range(m):
+            for col in range(n):
+                if grid[row][col] == 0:
+                    continue
+                max_fish = max(max_fish, dfs(row, col))
+        return max_fish
+
 
 if __name__ == "__main__":
     solution = Solution()
