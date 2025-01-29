@@ -11,6 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from sortedcontainers import SortedList
 
+from utils import DisjointSet
+
 # Binary Search
 
 
@@ -1062,6 +1064,48 @@ class Solution:
                     continue
                 max_fish = max(max_fish, dfs(row, col))
         return max_fish
+
+    # 684. Redundant Connection
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        dsu = DisjointSet(len(edges))
+        for edge in edges:
+            # If union returns false, we know the nodes are already connected
+            # and hence we can return this edge.
+            if not dsu.union(edge[0] - 1, edge[1] - 1):
+                return edge
+
+        return []
+
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        # Define parent and rank array
+        par = [i for i in range(len(edges) + 1)]
+        rank = [1] * (len(edges) + 1)
+
+        # Define find & union
+        # TODO: add union by rank
+        def find(n):
+            if n != par[n]:
+                par[n] = find(par[n])
+            return par[n]
+
+        def union(n1, n2):
+            p1, p2 = find(n1), find(n2)
+            # Already connected
+            if p1 == p2:
+                return False
+            # Connect
+            if rank[p1] >= rank[p2]:
+                par[p2] = p1
+                rank[p1] += rank[p2]
+            else:
+                par[p1] = p2
+                rank[p2] += rank[p1]
+            return True
+
+        # Find redundant edge
+        for n1, n2 in edges:
+            if not union(n1, n2):
+                return [n1, n2]
 
 
 if __name__ == "__main__":
