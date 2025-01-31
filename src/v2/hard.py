@@ -9,7 +9,12 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from sortedcontainers import SortedList
 
-from utils import DisjointSet
+from utils import (
+    DisjointSet,
+    UnknownDisjointSet,
+    adjacent_cells,
+    colorize_grid_and_get_size,
+)
 
 
 class Solution:
@@ -323,3 +328,33 @@ class Solution:
                 ),
             )
         return max_number_of_groups
+
+    # 827. Making A Large Island
+    def largestIsland(self, grid: List[List[int]]) -> int:
+        new_grid, groups = colorize_grid_and_get_size(
+            grid, lambda row, col: grid[row][col] == 1
+        )
+
+        m, n = len(grid), len(grid[0])
+        if len(groups.size) == 0:
+            return 1
+        if len(groups.size) == 1:
+            if groups.size[1] == m * n:
+                return m * n
+            return groups.size[1] + 1
+
+        res = 0
+        for row in range(len(grid)):
+            for col in range(len(grid[0])):
+                if new_grid[row][col] != 0:
+                    continue
+                adj_groups = set(
+                    groups.find(new_grid[cell[0]][cell[1]])
+                    for cell in adjacent_cells(row, col, m, n)
+                    if new_grid[cell[0]][cell[1]] != 0
+                )
+                res = max(
+                    res,
+                    sum(groups.size[adj_group] for adj_group in adj_groups) + 1,
+                )
+        return res
