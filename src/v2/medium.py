@@ -1107,35 +1107,21 @@ class Solution:
             if not union(n1, n2):
                 return [n1, n2]
 
+    # 916. Word Subsets
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+        def _acc_word(acc: Counter, word: str) -> Counter:
+            return acc | Counter(word)
+
+        counter = reduce(_acc_word, words2, Counter())
+        return [word for word in words1 if Counter(word) >= counter]
+
+    def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
+
+        counter = Counter()
+        for word in words2:
+            counter |= Counter(word)
+        return [word for word in words1 if Counter(word) >= counter]
+
 
 if __name__ == "__main__":
     solution = Solution()
-    edges1 = [[0, 1], [0, 2], [0, 3]]
-    edges2 = [[0, 1]]
-    print(solution.minimumDiameterAfterMerge(edges1, edges2))
-    edges1 = [[3, 0], [2, 1], [2, 3]]
-    edges2 = [
-        [0, 1],
-        [0, 4],
-        [3, 5],
-        [6, 3],
-        [7, 6],
-        [2, 7],
-        [0, 2],
-        [8, 0],
-        [8, 9],
-    ]
-    print(solution.minimumDiameterAfterMerge(edges1, edges2))
-    edges1 = [
-        [0, 1],
-        [2, 0],
-        [3, 2],
-        [3, 6],
-        [8, 7],
-        [4, 8],
-        [5, 4],
-        [3, 5],
-        [3, 9],
-    ]
-    edges2 = [[0, 1], [0, 2], [0, 3]]
-    print(solution.minimumDiameterAfterMerge(edges1, edges2))
