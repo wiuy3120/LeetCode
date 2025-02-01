@@ -1,7 +1,10 @@
-from typing import Callable, List
+from typing import Callable, List, Union
 
 
 class DisjointSet:
+    size: Union[list, dict]
+    representative: Union[list, dict]
+
     def __init__(self, N):
         # Initialize DSU class, size of each component will be one and each node
         # will be representative of its own.
@@ -75,34 +78,27 @@ class DisjointSetWithSize:
         self.representative[node] = node
         self.size[node] = 1
 
-    def increase_size(self, node):
-        # Increase the size of the set that contains the given node.
-        self.size[self.find(node)] += 1
+    def increase_size(self, node, amount: int = 1):
+        # Increase the size of the set that contains the given node
+        # with a certain amount.
+        self.size[self.find(node)] += amount
 
-    def union(self, nodeOne, nodeTwo, increase_size: bool = True):
+    def union(self, nodeOne, nodeTwo):
         # Returns true if node nodeOne and nodeTwo belong to different component
         # and update the representatives accordingly, otherwise returns false.
         nodeOne = self.find(nodeOne)
         nodeTwo = self.find(nodeTwo)
 
         if nodeOne == nodeTwo:
-            if increase_size:
-                self.increase_size(nodeOne)
-            return nodeOne
+            return False
 
         if self.size[nodeOne] > self.size[nodeTwo]:
-            parent = nodeOne
             self.representative[nodeTwo] = nodeOne
-            # self.size[nodeOne] += self.size[nodeTwo]
-
+            self.size[nodeOne] += self.size[nodeTwo]
         else:
-            parent = nodeTwo
             self.representative[nodeOne] = nodeTwo
-            # self.size[nodeTwo] += self.size[nodeOne]
-
-        if increase_size:
-            self.size[parent] = self.size[nodeOne] + self.size[nodeTwo] + 1
-        return parent
+            self.size[nodeTwo] += self.size[nodeOne]
+        return True
 
 
 def _backward_adjacent_cells(i: int, j: int):
@@ -139,8 +135,7 @@ def colorize_grid_and_get_size(
                     groups.increase_size(new_grid[i][j])
                     new_grid[row][col] = groups.find(new_grid[i][j])
                 case [(i, j), (k, l)]:
-                    parent = groups.union(
-                        new_grid[i][j], new_grid[k][l], increase_size=True
-                    )
-                    new_grid[row][col] = parent
+                    groups.union(new_grid[i][j], new_grid[k][l])
+                    groups.increase_size(new_grid[i][j])
+                    new_grid[row][col] = groups.find(new_grid[i][j])
     return new_grid, groups
