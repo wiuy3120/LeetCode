@@ -1122,6 +1122,14 @@ class Solution:
             counter |= Counter(word)
         return [word for word in words1 if Counter(word) >= counter]
 
+    # 1400. Construct K Palindrome Strings
+    def canConstruct(self, s: str, k: int) -> bool:
+        if len(s) < k:
+            return False
+        counter = Counter(s)
+        num_odds = sum(count & 1 for count in counter.values())
+        return num_odds <= k
+
 
 if __name__ == "__main__":
     solution = Solution()
