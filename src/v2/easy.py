@@ -93,3 +93,27 @@ class Solution:
             ::-1
         ]
         return [left + right for left, right in zip(left_moves, right_moves)]
+
+    # 3151. Special Array I
+    def isArraySpecial(self, nums: List[int]) -> bool:
+        for i in range(1, len(nums)):
+            if (nums[i] & 1) == (nums[i - 1] & 1):
+                return False
+        return True
+
+    def isArraySpecial(self, nums: List[int]) -> bool:
+        return not any(
+            (nums[i] & 1) == (nums[i - 1] & 1) for i in range(1, len(nums))
+        )
+
+    def isArraySpecial(self, nums: List[int]) -> bool:
+        return all(
+            (nums[i] & 1) != (nums[i - 1] & 1) for i in range(1, len(nums))
+        )
+
+    def isArraySpecial(self, nums: List[int]) -> bool:
+        return all(
+            False
+            for i in range(1, len(nums))
+            if (nums[i] & 1) == (nums[i - 1] & 1)
+        )
