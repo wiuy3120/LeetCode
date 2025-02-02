@@ -117,3 +117,13 @@ class Solution:
             for i in range(1, len(nums))
             if (nums[i] & 1) == (nums[i - 1] & 1)
         )
+
+    # 1752. Check if Array Is Sorted and Rotated
+    def check(self, nums: List[int]) -> bool:
+        is_rotated = False
+        for i in range(1, len(nums)):
+            if nums[i] < nums[i - 1]:
+                if is_rotated:
+                    return False
+                is_rotated = True
+        return not is_rotated or nums[-1] <= nums[0]
