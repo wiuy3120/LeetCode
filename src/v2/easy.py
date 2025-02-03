@@ -127,3 +127,23 @@ class Solution:
                     return False
                 is_rotated = True
         return not is_rotated or nums[-1] <= nums[0]
+
+    # 3105. Longest Strictly Increasing or Strictly Decreasing Subarray
+    def longestMonotonicSubarray(self, nums: List[int]) -> int:
+        res = 1
+        direction = 0
+        left_pointer = 0
+        for right_pointer in range(1, len(nums)):
+            if nums[right_pointer] == nums[right_pointer - 1]:
+                left_pointer = right_pointer
+                direction = 0
+            elif nums[right_pointer] > nums[right_pointer - 1]:
+                if direction == -1:
+                    left_pointer = right_pointer - 1
+                direction = 1
+            else:
+                if direction == 1:
+                    left_pointer = right_pointer - 1
+                direction = -1
+            res = max(res, right_pointer - left_pointer + 1)
+        return res
