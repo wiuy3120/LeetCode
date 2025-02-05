@@ -147,3 +147,21 @@ class Solution:
                 direction = -1
             res = max(res, right_pointer - left_pointer + 1)
         return res
+
+    # 1790. Check if One String Swap Can Make Strings Equal
+    def areAlmostEqual(self, s1: str, s2: str) -> bool:
+        if len(s1) != len(s2):
+            return False
+        diff_count = 0
+        diff_chars = []
+        for c1, c2 in zip(s1, s2):
+            if c1 != c2:
+                diff_count += 1
+                if diff_count > 2:
+                    return False
+                diff_chars.append((c1, c2))
+        if diff_count == 0:
+            return True
+        if diff_count == 1:
+            return False
+        return diff_chars[0] == diff_chars[1][::-1]
