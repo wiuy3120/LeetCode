@@ -1130,6 +1130,38 @@ class Solution:
         num_odds = sum(count & 1 for count in counter.values())
         return num_odds <= k
 
+    # 1726. Tuple with Same Product
+    def tupleSameProduct(self, nums: List[int]) -> int:
+        product_counter = Counter()
+        for i, num1 in enumerate(nums):
+            for num2 in nums[i + 1 :]:
+                product_counter[num1 * num2] += 1
+        return sum(
+            count * (count - 1) * 4 for count in product_counter.values()
+        )
+
+    def tupleSameProduct(self, nums: List[int]) -> int:
+        from itertools import combinations, starmap
+        from operator import mul
+
+        return 4 * sum(
+            count * (count - 1)
+            for count in Counter(starmap(mul, combinations(nums, 2))).values()
+        )
+
+    def tupleSameProduct(self, nums: List[int]) -> int:
+        from itertools import combinations, starmap, cycle
+        from operator import mul
+        from math import comb
+
+        return 8 * sum(
+            map(
+                comb,
+                Counter(starmap(mul, combinations(nums, 2))).values(),
+                cycle([2]),
+            )
+        )
+
 
 if __name__ == "__main__":
     solution = Solution()
