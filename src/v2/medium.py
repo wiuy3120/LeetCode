@@ -9,7 +9,7 @@ from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
 
-from sortedcontainers import SortedList
+from sortedcontainers import SortedDict, SortedList, SortedSet
 
 from utils import DisjointSet
 
@@ -23,8 +23,65 @@ class TreeNode:
         self.right: TreeNode | None = right
 
 
-# 2070. Most Beautiful Item for Each Query
+# 2349. Design a Number Container System
+class NumberContainers:
+
+    def __init__(self):
+        self.index_to_number: Dict[int, int] = {}
+        self.number_to_indices: Dict[int, SortedSet] = defaultdict(SortedSet)
+
+    def change(self, index: int, number: int) -> None:
+        if index in self.index_to_number:
+            self.number_to_indices[self.index_to_number[index]].remove(index)
+        self.index_to_number[index] = number
+        self.number_to_indices[number].add(index)
+
+    def find(self, number: int) -> int:
+        if number not in self.number_to_indices:
+            return -1
+        if len(self.number_to_indices[number]) == 0:
+            return -1
+        return self.number_to_indices[number][0]
+
+    def __init__(self):
+        self.index_to_number: Dict[int, int] = {}
+        self.number_to_indices: Dict[int, SortedList] = defaultdict(SortedList)
+
+    def change(self, index: int, number: int) -> None:
+        self.index_to_number[index] = number
+        self.number_to_indices[number].add(index)
+
+    def find(self, number: int) -> int:
+        if number not in self.number_to_indices:
+            return -1
+        while len(self.number_to_indices[number]) > 0:
+            index = self.number_to_indices[number][0]
+            if self.index_to_number[index] == number:
+                return index
+            self.number_to_indices[number].pop(0)
+        return -1
+
+    def __init__(self):
+        self.index_to_number: Dict[int, int] = {}
+        self.number_to_indices: Dict[int, List[int]] = defaultdict(list)
+
+    def change(self, index: int, number: int) -> None:
+        self.index_to_number[index] = number
+        heappush(self.number_to_indices[number], index)
+
+    def find(self, number: int) -> int:
+        if number not in self.number_to_indices:
+            return -1
+        while len(self.number_to_indices[number]) > 0:
+            index = self.number_to_indices[number][0]
+            if self.index_to_number[index] == number:
+                return index
+            heappop(self.number_to_indices[number])
+        return -1
+
+
 class Solution:
+    # 2070. Most Beautiful Item for Each Query
     def maximumBeauty(
         self, items: List[List[int]], queries: List[int]
     ) -> List[int]:
@@ -1150,9 +1207,9 @@ class Solution:
         )
 
     def tupleSameProduct(self, nums: List[int]) -> int:
-        from itertools import combinations, starmap, cycle
-        from operator import mul
+        from itertools import combinations, cycle, starmap
         from math import comb
+        from operator import mul
 
         return 8 * sum(
             map(
