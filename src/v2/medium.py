@@ -539,7 +539,7 @@ class Solution:
             if n <= 2:
                 return n - 1
 
-            connected_dict = [[] for _ in range(n)]
+            connected_dict = {i: [] for i in range(n)}
             for u, v in edges:
                 connected_dict[u].append(v)
                 connected_dict[v].append(u)
@@ -679,7 +679,7 @@ class Solution:
         return res
 
     def countPalindromicSubsequence(self, s: str) -> int:
-        char_range = [None] * 26
+        char_range = [[-1]] * 26
         for i, char in enumerate(s):
             idx = ord(char) - ord("a")
             if char_range[idx] is None:
@@ -894,7 +894,7 @@ class Solution:
         # all list
         m, n = len(mat), len(mat[0])
 
-        index_list = [None] * (m * n)
+        index_list = [(-1, -1)] * (m * n)
         for row in range(m):
             for col in range(n):
                 index_list[mat[row][col] - 1] = (row, col)
@@ -1163,6 +1163,7 @@ class Solution:
         for n1, n2 in edges:
             if not union(n1, n2):
                 return [n1, n2]
+        return []
 
     # 916. Word Subsets
     def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
@@ -1217,6 +1218,25 @@ class Solution:
                 Counter(starmap(mul, combinations(nums, 2))).values(),
                 cycle([2]),
             )
+        )
+
+    # 2364. Count Number of Bad Pairs
+    def countBadPairs(self, nums: List[int]) -> int:
+        n = len(nums)
+        counter = Counter(num - i for i, num in enumerate(nums))
+        return n * (n - 1) // 2 - sum(
+            count * (count - 1) // 2 for count in counter.values()
+        )
+
+    def countBadPairs(self, nums: List[int]) -> int:
+        n = len(nums)
+        counter = Counter(num - i for i, num in enumerate(nums))
+        return (
+            n * (n - 1) // 2
+            - sum(
+                count * (count - 1) for count in counter.values() if count > 1
+            )
+            // 2
         )
 
 
