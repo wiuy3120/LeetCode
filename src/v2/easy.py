@@ -186,3 +186,17 @@ class Solution:
                 max_sum = max(max_sum, current_sum)
                 current_sum = nums[i]
         return max(max_sum, current_sum)
+
+    # 3174. Clear Digits
+    def clearDigits(self, s: str) -> str:
+        res = ""
+        num_digits = 0
+        for char in s[::-1]:
+            if char.isdigit():
+                num_digits += 1
+            else:
+                if num_digits != 0:
+                    num_digits -= 1
+                else:
+                    res = char + res
+        return res
