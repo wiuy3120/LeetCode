@@ -3,6 +3,4 @@ from .disjoint_sets import (
     UnknownDisjointSet,
     colorize_grid_and_get_size,
 )
-
-
 from .matrix_utils import adjacent_cells

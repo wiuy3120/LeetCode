@@ -45,7 +45,6 @@ def min_sub_arr(arr: list, k: int):
 
     min_len = len(arr)
     for left in range(len(arr)):
-
         if left > 0 and counter[arr[left - 1]] == 1:
             del counter[arr[left - 1]]
         else:

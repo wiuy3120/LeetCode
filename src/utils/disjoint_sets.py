@@ -61,7 +61,6 @@ class UnknownDisjointSet(DisjointSet):
 
 
 class DisjointSetWithSize:
-
     def __init__(self):
         self.size = {}
         self.representative = {}
