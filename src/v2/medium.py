@@ -25,7 +25,6 @@ class TreeNode:
 
 # 2349. Design a Number Container System
 class NumberContainers:
-
     def __init__(self):
         self.index_to_number: Dict[int, int] = {}
         self.number_to_indices: Dict[int, SortedSet] = defaultdict(SortedSet)
@@ -205,7 +204,6 @@ class Solution:
 
     # 2054. Two Best Non-Overlapping Events
     def maxTwoEvents(self, events: List[List[int]]) -> int:
-
         def acc_max_func(last: Tuple[int, int], current: Tuple[int, int]):
             return (
                 current[0],
@@ -1174,7 +1172,6 @@ class Solution:
         return [word for word in words1 if Counter(word) >= counter]
 
     def wordSubsets(self, words1: List[str], words2: List[str]) -> List[str]:
-
         counter = Counter()
         for word in words2:
             counter |= Counter(word)
@@ -1238,6 +1235,31 @@ class Solution:
             )
             // 2
         )
+
+    # 1910. Remove All Occurrences of a Substring
+    def removeOccurrences(self, s: str, part: str) -> str:
+        stack = []
+        for char in s:
+            stack.append(char)
+            if len(stack) >= len(part) and (
+                "".join(stack[-len(part) :]) == part
+            ):
+                del stack[-len(part) :]
+        return "".join(stack)
+
+    def removeOccurrences(self, s: str, part: str) -> str:
+        stack = ""
+        for char in s:
+            stack += char
+            if len(stack) >= len(part) and stack.endswith(part):
+                stack = stack[: -len(part)]
+
+        return stack
+
+    def removeOccurrences(self, s: str, part: str) -> str:
+        while part in s:
+            s = s.replace(part, "", 1)
+        return s
 
 
 if __name__ == "__main__":
