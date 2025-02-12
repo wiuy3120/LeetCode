@@ -1261,6 +1261,55 @@ class Solution:
             s = s.replace(part, "", 1)
         return s
 
+    # 2342. Max Sum of a Pair With Equal Sum of Digits
+    def maximumSum(self, nums: List[int]) -> int:
+        def sum_of_digits(num: int) -> int:
+            return sum(int(digit) for digit in str(num))
+
+        digit_sum_dict = defaultdict(list)
+        for num in nums:
+            digit_sum = sum_of_digits(num)
+            if len(digit_sum_dict[digit_sum]) < 2:
+                digit_sum_dict[digit_sum].append(num)
+                continue
+            num_list = sorted(digit_sum_dict[digit_sum])
+            if num > num_list[1]:
+                num_list = [num_list[1], num]
+            elif num > num_list[0]:
+                num_list = [num, num_list[1]]
+            digit_sum_dict[digit_sum] = num_list
+
+        return max(
+            [
+                sum(num_list)
+                for num_list in digit_sum_dict.values()
+                if len(num_list) == 2
+            ],
+            default=-1,
+        )
+
+    def maximumSum(self, nums: List[int]) -> int:
+        def sum_of_digits(num: int) -> int:
+            return sum(int(digit) for digit in str(num))
+
+        digit_sum_dict = defaultdict(list)
+        for num in nums:
+            digit_sum = sum_of_digits(num)
+            digit_sum_dict[digit_sum].append(num)
+            if len(digit_sum_dict[digit_sum]) > 2:
+                digit_sum_dict[digit_sum] = sorted(
+                    digit_sum_dict[digit_sum], reverse=True
+                )[:2]
+
+        return max(
+            [
+                sum(num_list)
+                for num_list in digit_sum_dict.values()
+                if len(num_list) == 2
+            ],
+            default=-1,
+        )
+
 
 if __name__ == "__main__":
     solution = Solution()
