@@ -1310,6 +1310,38 @@ class Solution:
             default=-1,
         )
 
+    # 3066. Minimum Operations to Exceed Threshold Value II
+    def minOperations(self, nums: List[int], k: int) -> int:
+        sorted_nums = sorted(nums)
+        added_nums = []
+        num_ops = 0
+        i = j = 0
+        while True:
+            if i < len(sorted_nums) and (
+                j >= len(added_nums) or sorted_nums[i] <= added_nums[j]
+            ):
+                x = sorted_nums[i]
+                i += 1
+            else:
+                x = added_nums[j]
+                j += 1
+
+            if x >= k:
+                return num_ops
+
+            if i < len(sorted_nums) and (
+                j >= len(added_nums) or sorted_nums[i] <= added_nums[j]
+            ):
+                y = sorted_nums[i]
+                i += 1
+            else:
+                y = added_nums[j]
+                j += 1
+
+            added_nums.append(2 * x + y)
+            num_ops += 1
+        return -1
+
 
 if __name__ == "__main__":
     solution = Solution()
