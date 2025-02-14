@@ -79,6 +79,24 @@ class NumberContainers:
         return -1
 
 
+# 1352. Product of the Last K Numbers
+class ProductOfNumbers:
+    def __init__(self):
+        self.prefix_products: List[int] = [1]
+
+    def add(self, num: int) -> None:
+        if num == 0:
+            self.prefix_products = [1]
+            return
+        next_product = self.prefix_products[-1] * num
+        self.prefix_products.append(next_product)
+
+    def getProduct(self, k: int) -> int:
+        if k >= len(self.prefix_products):
+            return 0
+        return self.prefix_products[-1] // self.prefix_products[-k - 1]
+
+
 class Solution:
     # 2070. Most Beautiful Item for Each Query
     def maximumBeauty(
@@ -96,9 +114,7 @@ class Solution:
             for query in queries
         ]
 
-
-# 2461. Maximum Sum of Distinct Subarrays With Length K
-class Solution:
+    # 2461. Maximum Sum of Distinct Subarrays With Length K
     def maximumSubarraySum(self, nums: List[int], k: int) -> int:
         counter = Counter(nums[:k])
         distinct_count = len(counter)
