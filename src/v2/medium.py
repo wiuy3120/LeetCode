@@ -4,7 +4,7 @@ import math
 import operator
 import random
 from collections import Counter, defaultdict, deque
-from functools import reduce
+from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
@@ -1357,6 +1357,45 @@ class Solution:
             added_nums.append(2 * x + y)
             num_ops += 1
         return -1
+
+    # 2698. Find the Punishment Number of an Integer
+    def punishmentNumber(self, n: int) -> int:
+        def can_be_partitioned(num: int):
+            if num == 1:
+                return 1
+            square = str(num**2)
+            max_splits = len(square) - 1
+            for i in range(1, 2**max_splits):
+                split_indices = bin(i)[2:].zfill(max_splits)
+                last_index = -1
+                sum_digits = 0
+                for index, is_split in enumerate(split_indices):
+                    if is_split == "1":
+                        sum_digits += int(square[last_index + 1 : index + 1])
+                        last_index = index
+                sum_digits += int(square[last_index + 1 : max_splits + 1])
+                if sum_digits == num:
+                    return num**2
+            return 0
+
+        return sum(can_be_partitioned(num) for num in range(1, n + 1))
+
+    def punishmentNumber(self, n: int) -> int:
+        @lru_cache(None)
+        def can_be_partitioned(num: int, target: int):
+            if num == target:
+                return True
+
+            max_splits = math.floor(math.log10(num))
+            for i in range(1, max_splits + 1):
+                divisor = 10**i
+                if can_be_partitioned(num // divisor, target - (num % divisor)):
+                    return True
+            return False
+
+        return sum(
+            num**2 for num in range(1, n + 1) if can_be_partitioned(num**2, num)
+        )
 
 
 if __name__ == "__main__":
