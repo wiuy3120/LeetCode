@@ -1397,6 +1397,41 @@ class Solution:
             num**2 for num in range(1, n + 1) if can_be_partitioned(num**2, num)
         )
 
+    # 1718. Construct the Lexicographically Largest Valid Sequence
+    def constructDistancedSequence(self, n: int) -> List[int]:
+        m = 2 * n - 1
+
+        def backtrack(result: List[int], index: int, used: List[bool]):
+            while index < m and result[index] != 0:
+                index += 1
+
+            if index == m:
+                return True
+
+            for num in range(n, 1, -1):
+                if used[num]:
+                    continue
+                if index + num < len(result) and result[index + num] == 0:
+                    result[index] = result[index + num] = num
+                    used[num] = True
+                    if backtrack(result, index + 1, used):
+                        return True
+                    result[index] = result[index + num] = 0
+                    used[num] = False
+            if used[1]:
+                return False
+            result[index], used[1] = 1, True
+            if backtrack(result, index + 1, used):
+                return True
+            result[index], used[1] = 0, False
+
+            return False
+
+        result = [0] * m
+        used = [False] * (n + 1)
+        backtrack(result, 0, used)
+        return result
+
 
 if __name__ == "__main__":
     solution = Solution()
