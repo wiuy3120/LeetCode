@@ -1432,6 +1432,41 @@ class Solution:
         backtrack(result, 0, used)
         return result
 
+    # 1079. Letter Tile Possibilities
+    def numTilePossibilities(self, tiles: str) -> int:
+        from itertools import permutations
+
+        return sum(
+            len(set(permutations(tiles, length)))
+            for length in range(1, len(tiles) + 1)
+        )
+
+    def numTilePossibilities(self, tiles: str) -> int:
+        from math import factorial
+
+        counter = list(Counter(tiles).values())
+        ans = 0
+        res = [0] * len(counter)
+
+        def backtrack(i: int):
+            nonlocal ans
+            permutations = 1
+            for x in res:
+                if x > 0:
+                    permutations *= factorial(x)
+            ans += factorial(sum(res)) // permutations
+
+            for j in range(i, len(counter)):
+                if counter[j] > 0:
+                    res[j] += 1
+                    counter[j] -= 1
+                    backtrack(j)
+                    res[j] -= 1
+                    counter[j] += 1
+
+        backtrack(0)
+        return ans - 1
+
 
 if __name__ == "__main__":
     solution = Solution()
