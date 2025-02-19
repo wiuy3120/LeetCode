@@ -1467,6 +1467,19 @@ class Solution:
         backtrack(0)
         return ans - 1
 
+    # 1415. The k-th Lexicographical String of All Happy Strings of Length n
+    def getHappyString(self, n: int, k: int) -> str:
+        if k > 3 * 2 ** (n - 1):
+            return ""
+        res = chr(ord("a") + (k - 1) // (2 ** (n - 1)))
+        if n == 1:
+            return res
+        indices = bin((k - 1) % (2 ** (n - 1)))[2:].zfill(n - 1)
+        options = [["b", "c"], ["a", "c"], ["a", "b"]]
+        for index in indices:
+            res += options[ord(res[-1]) - ord("a")][int(index)]
+        return res
+
 
 if __name__ == "__main__":
     solution = Solution()
