@@ -1480,6 +1480,15 @@ class Solution:
             res += options[ord(res[-1]) - ord("a")][int(index)]
         return res
 
+    # 1980. Find Unique Binary String
+    def findDifferentBinaryString(self, nums: List[str]) -> str:
+        n = len(nums)
+        num_set = set(nums)
+        for i in range(2**n):
+            binary = bin(i)[2:].zfill(n)
+            if binary not in num_set:
+                return binary
+
 
 if __name__ == "__main__":
     solution = Solution()
