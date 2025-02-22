@@ -3,10 +3,11 @@ import bisect
 import math
 import random
 from collections import Counter, defaultdict, deque
+from functools import reduce
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
-from typing import Dict, List, Optional, Set, Tuple
-
+from typing import Deque, Dict, List, Optional, Set, Tuple
+import re
 from sortedcontainers import SortedList
 
 from utils import (
@@ -15,6 +16,18 @@ from utils import (
     adjacent_cells,
     colorize_grid_and_get_size,
 )
+
+
+class TreeNode:
+    def __init__(
+        self,
+        val: int = 0,
+        left: Optional["TreeNode"] = None,
+        right: Optional["TreeNode"] = None,
+    ):
+        self.val = val
+        self.left = left
+        self.right = right
 
 
 class Solution:
@@ -97,10 +110,7 @@ class Solution:
             degree[x] += 1
             degree[y] -= 1
 
-        for k in degree:
-            if degree[k] == 1:
-                x = k
-                break
+        x = next(k for k in degree if degree[k] == 1)
 
         ans = []
 
@@ -358,3 +368,36 @@ class Solution:
                     sum(groups.size[adj_group] for adj_group in adj_groups) + 1,
                 )
         return res
+
+    # 1028. Recover a Tree From Preorder Traversal
+    def recoverFromPreorder(self, traversal: str) -> Optional[TreeNode]:
+        nums = [int(x) for x in re.findall(r"\d+", traversal)]
+        levels = [len(dashes) for dashes in re.split(r"\d+", traversal)[:-1]]
+        root = TreeNode(nums[0])
+        stack = deque([(root, 0)])
+        for num, level in zip(nums[1:], levels[1:]):
+            while stack[-1][1] != level - 1:
+                stack.pop()
+            node = TreeNode(num)
+            if stack[-1][0].left is None:
+                stack[-1][0].left = node
+            else:
+                stack[-1][0].right = node
+            stack.append((node, level))
+        return root
+
+    def recoverFromPreorder(self, traversal: str) -> Optional[TreeNode]:
+        queue = deque(
+            (len(s[1]), int(s[2]))
+            for s in re.findall(r"((-*)(\d+))", traversal)
+        )
+
+        def _dfs(level: int):
+            if not queue or level != queue[0][0]:
+                return None
+            node = TreeNode(queue.popleft()[1])
+            node.left = _dfs(level + 1)
+            node.right = _dfs(level + 1)
+            return node
+
+        return _dfs(0)
