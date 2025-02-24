@@ -1517,6 +1517,24 @@ class Solution:
             if binary not in num_set:
                 return binary
 
+    # 889. Construct Binary Tree from Preorder and Postorder Traversal
+    def constructFromPrePost(
+        self, preorder: List[int], postorder: List[int]
+    ) -> Optional[TreeNode]:
+        stack = deque([TreeNode(preorder[0])])
+        post_index = 0
+        for value in preorder[1:]:
+            node = TreeNode(value)
+            while stack[-1].val == postorder[post_index]:
+                stack.pop()
+                post_index += 1
+            if stack[-1].left is None:
+                stack[-1].left = node
+            else:
+                stack[-1].right = node
+            stack.append(node)
+        return stack[0]
+
 
 if __name__ == "__main__":
     solution = Solution()
