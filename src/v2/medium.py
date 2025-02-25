@@ -1535,6 +1535,34 @@ class Solution:
             stack.append(node)
         return stack[0]
 
+    # 1524. Number of Sub-arrays With Odd Sum
+    def numOfSubarrays(self, arr: List[int]) -> int:
+        odd_count = 0
+        even_count = 1
+        total_sum = 0
+        for num in arr:
+            total_sum += num
+            if total_sum % 2 == 0:
+                even_count += 1
+            else:
+                odd_count += 1
+        return odd_count * even_count % (10**9 + 7)
+
+    def numOfSubarrays(self, arr: List[int]) -> int:
+        odd_count = 0
+        even_count = 1
+        total_sum = 0
+        res = 0
+        for num in arr:
+            total_sum += num
+            if total_sum % 2 == 0:
+                res += odd_count
+                even_count += 1
+            else:
+                res += even_count
+                odd_count += 1
+        return res % (10**9 + 7)
+
 
 if __name__ == "__main__":
     solution = Solution()
