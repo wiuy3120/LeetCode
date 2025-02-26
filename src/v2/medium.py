@@ -1563,6 +1563,19 @@ class Solution:
                 odd_count += 1
         return res % (10**9 + 7)
 
+    # 1749. Maximum Absolute Sum of Any Subarray
+    def maxAbsoluteSum(self, nums: List[int]) -> int:
+        max_sum = min_sum = total_sum = 0
+        for num in nums:
+            total_sum += num
+            max_sum = max(max_sum, total_sum)
+            min_sum = min(min_sum, total_sum)
+        return max_sum - min_sum
+
+    def maxAbsoluteSum(self, nums: List[int]) -> int:
+        acc_sum = list(accumulate(nums, initial=0))
+        return max(acc_sum) - min(acc_sum)
+
 
 if __name__ == "__main__":
     solution = Solution()
