@@ -1576,6 +1576,19 @@ class Solution:
         acc_sum = list(accumulate(nums, initial=0))
         return max(acc_sum) - min(acc_sum)
 
+    # 873. Length of Longest Fibonacci Subsequence
+    def lenLongestFibSubseq(self, arr: List[int]) -> int:
+        num_set = set(arr)
+        dp = defaultdict(lambda: 2)
+        max_length = 0
+        for i, num1 in enumerate(arr):
+            for j in range(i):
+                num2 = arr[j]
+                if num1 - num2 < num2 and num1 - num2 in num_set:
+                    dp[num2, num1] = dp[num1 - num2, num2] + 1
+                    max_length = max(max_length, dp[num2, num1])
+        return max_length
+
 
 if __name__ == "__main__":
     solution = Solution()
