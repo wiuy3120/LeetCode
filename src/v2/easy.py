@@ -1,5 +1,6 @@
 # pyright: reportRedeclaration=false
 import bisect
+import enum
 import math
 import random
 from collections import Counter, defaultdict, deque
@@ -200,3 +201,33 @@ class Solution:
                 else:
                     res = char + res
         return res
+
+    # 2460. Apply Operations to an Array
+    def applyOperations(self, nums: List[int]) -> List[int]:
+        left = 0
+        for right in range(1, len(nums)):
+            if nums[left] == 0:
+                nums[left] = nums[right]
+                nums[right] = 0
+                continue
+            if nums[left] == nums[right]:
+                nums[left] *= 2
+                nums[right] = 0
+            elif left + 1 != right:
+                nums[left + 1] = nums[right]
+                nums[right] = 0
+            left += 1
+        return nums
+
+    def applyOperations(self, nums: List[int]) -> List[int]:
+        left = 0
+        for right in range(len(nums) - 1):
+            if nums[right] == nums[right + 1]:
+                nums[right] *= 2
+                nums[right + 1] = 0
+            if nums[right] != 0:
+                nums[left], nums[right] = nums[right], nums[left]
+                left += 1
+        if nums[-1] != 0:
+            nums[left], nums[-1] = nums[-1], nums[left]
+        return nums
