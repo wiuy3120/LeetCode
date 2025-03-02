@@ -231,3 +231,56 @@ class Solution:
         if nums[-1] != 0:
             nums[left], nums[-1] = nums[-1], nums[left]
         return nums
+
+    # 2570. Merge Two 2D Arrays by Summing Values
+    def mergeArrays(
+        self, nums1: List[List[int]], nums2: List[List[int]]
+    ) -> List[List[int]]:
+        idx2 = 0
+        res_nums = []
+        for idx1, num1 in enumerate(nums1):
+            while idx2 < len(nums2) and nums2[idx2][0] < num1[0]:
+                res_nums.append(nums2[idx2])
+                idx2 += 1
+            if idx2 == len(nums2):
+                res_nums.append(num1)
+                continue
+            num2 = nums2[idx2]
+            if num1[0] == num2[0]:
+                res_nums.append([num1[0], num1[1] + num2[1]])
+                idx2 += 1
+            else:
+                res_nums.append(num1)
+
+        while idx2 < len(nums2):
+            res_nums.append(nums2[idx2])
+            idx2 += 1
+
+        return res_nums
+
+    def mergeArrays(
+        self, nums1: List[List[int]], nums2: List[List[int]]
+    ) -> List[List[int]]:
+        idx1 = idx2 = 0
+        res_nums = []
+        while idx1 < len(nums1) and idx2 < len(nums2):
+            num1, num2 = nums1[idx1], nums2[idx2]
+            if num1[0] < num2[0]:
+                res_nums.append(num1)
+                idx1 += 1
+            elif num1[0] > num2[0]:
+                res_nums.append(num2)
+                idx2 += 1
+            else:
+                res_nums.append([num1[0], num1[1] + num2[1]])
+                idx1 += 1
+                idx2 += 1
+
+        while idx1 < len(nums1):
+            res_nums.append(nums1[idx1])
+            idx1 += 1
+        while idx2 < len(nums2):
+            res_nums.append(nums2[idx2])
+            idx2 += 1
+
+        return res_nums
