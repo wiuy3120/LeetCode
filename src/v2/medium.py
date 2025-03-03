@@ -8,6 +8,7 @@ from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
 from typing import Dict, List, Optional, Set, Tuple
+from unittest import result
 
 from sortedcontainers import SortedDict, SortedList, SortedSet
 
@@ -1588,6 +1589,70 @@ class Solution:
                     dp[num2, num1] = dp[num1 - num2, num2] + 1
                     max_length = max(max_length, dp[num2, num1])
         return max_length
+
+    # 2161. Partition Array According to Given Pivot
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        result_nums = [pivot] * len(nums)
+        left_index = 0
+        right_index = len(nums) - 1
+        for num in nums:
+            if num < pivot:
+                result_nums[left_index] = num
+                left_index += 1
+        for num in nums[::-1]:
+            if num > pivot:
+                result_nums[right_index] = num
+                right_index -= 1
+        return result_nums
+
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        result_nums = [pivot] * len(nums)
+        left_index, right_index = 0, -1
+        for i in range(len(nums)):
+            if nums[i] < pivot:
+                result_nums[left_index] = nums[i]
+                left_index += 1
+            if nums[~i] > pivot:
+                result_nums[right_index] = nums[~i]
+                right_index -= 1
+        return result_nums
+
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        return (
+            [num for num in nums if num < pivot]
+            + [num for num in nums if num == pivot]
+            + [num for num in nums if num > pivot]
+        )
+
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        left = [num for num in nums if num < pivot]
+        right = [num for num in nums if num > pivot]
+        return left + [pivot] * (len(nums) - len(left) - len(right)) + right
+
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        left = []
+        right = []
+        for num in nums:
+            if num < pivot:
+                left.append(num)
+            elif num > pivot:
+                right.append(num)
+        return left + [pivot] * (len(nums) - len(left) - len(right)) + right
+
+    def pivotArray(self, nums: List[int], pivot: int) -> List[int]:
+        left_index = 0
+        right_nums = []
+        for i, num in enumerate(nums):
+            if num < pivot:
+                nums[left_index] = num
+                left_index += 1
+            elif num > pivot:
+                right_nums.append(num)
+            if left_index <= i:
+                nums[i] = pivot
+        for i, num in enumerate(right_nums):
+            nums[-len(right_nums) + i] = num
+        return nums
 
 
 if __name__ == "__main__":
