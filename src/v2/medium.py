@@ -6,7 +6,7 @@ import random
 from collections import Counter, defaultdict, deque
 from functools import lru_cache, reduce
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
-from itertools import accumulate
+from itertools import accumulate, chain
 from typing import Dict, List, Optional, Set, Tuple
 from unittest import result
 

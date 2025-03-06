@@ -5,7 +5,7 @@ import math
 import random
 from collections import Counter, defaultdict, deque
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
-from itertools import accumulate
+from itertools import accumulate, chain
 from typing import Dict, List, Optional, Set, Tuple
 
 from sortedcontainers import SortedList
@@ -284,3 +284,28 @@ class Solution:
             idx2 += 1
 
         return res_nums
+
+    # [fav]
+    # 2965. Find Missing and Repeated Values
+    def findMissingAndRepeatedValues(self, grid: List[List[int]]) -> List[int]:
+        n = len(grid)
+        missing = repeated = 0
+        counter = Counter(chain(*grid))
+        for i in range(1, n * n + 1):
+            if counter[i] == 0:
+                missing = i
+            if counter[i] == 2:
+                repeated = i
+        return [repeated, missing]
+
+    def findMissingAndRepeatedValues(self, grid: List[List[int]]) -> List[int]:
+        n = len(grid) ** 2
+        sum_grid = sum(sum(row) for row in grid)
+        sum_n = n * (n + 1) // 2
+        squared_sum_grid = sum(sum(cell**2 for cell in row) for row in grid)
+        squared_sum_n = n * (n + 1) * (2 * n + 1) // 6
+        # repeated + missing
+        repeated = (squared_sum_grid - squared_sum_n) // (sum_grid - sum_n)
+        missing = (repeated + sum_n - sum_grid) // 2
+        repeated -= missing
+        return [repeated, missing]
