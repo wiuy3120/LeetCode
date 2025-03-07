@@ -1662,6 +1662,128 @@ class Solution:
             n //= 3
         return True
 
+    # [fav]
+    # 2523. Closest Prime Numbers in Range
+    def closestPrimes(self, left: int, right: int) -> list[int]:
+        def is_prime(n: int):
+            if n <= 1:  # negative numbers, 0 or 1
+                return False
+            if n <= 3:  # 2 and 3
+                return True
+            if n % 2 == 0 or n % 3 == 0:
+                return False
+
+            for i in range(5, int(math.sqrt(n)) + 1, 2):
+                if n % i == 0:
+                    return False
+
+            return True
+
+        primes = [num for num in range(left, right + 1) if is_prime(num)]
+
+        if len(primes) < 2:
+            return [-1, -1]
+
+        min_gap = right
+        result = [-1, -1]
+
+        for i in range(1, len(primes)):
+            gap = primes[i] - primes[i - 1]
+            if gap < min_gap:
+                min_gap = gap
+                result = [primes[i - 1], primes[i]]
+
+        return result
+
+    def closestPrimes(self, left: int, right: int) -> list[int]:
+        sieve = [True] * (right + 1)
+        sieve[0] = sieve[1] = False
+
+        for i in range(2, int(right**0.5) + 1):
+            if sieve[i]:
+                for j in range(i * i, right + 1, i):
+                    sieve[j] = False
+
+        primes = [num for num in range(left, right + 1) if sieve[num]]
+
+        if len(primes) < 2:
+            return [-1, -1]
+
+        min_gap = right
+        result = [-1, -1]
+
+        for i in range(1, len(primes)):
+            gap = primes[i] - primes[i - 1]
+            if gap < min_gap:
+                min_gap = gap
+                result = [primes[i - 1], primes[i]]
+
+        return result
+
+    def closestPrimes(self, left: int, right: int) -> list[int]:
+        # https://leetcode.com/problems/closest-prime-numbers-in-range/solutions/6496280/efficient-primality-test-miller-rabin-python-c
+        # https://leetcode.com/problems/closest-prime-numbers-in-range/solutions/6508420/miller-test-the-fastest-possible-beats-100-00
+        if right - left < 1:
+            return [-1, -1]
+
+        left = max(2, left)
+        if left == 2 and right >= 3:
+            return [2, 3]
+
+        if left & 1 == 0:
+            left += 1
+
+        prev_prime = -1
+        min_diff = float("inf")
+        res = [-1, -1]
+
+        def is_composite_witness(n: int, witness: int, d: int, s: int) -> bool:
+            x = pow(witness, d, n)
+            if x == 1 or x == n - 1:
+                return False
+            for _ in range(1, s):
+                x = pow(x, 2, n)
+                if x == n - 1:
+                    return False
+            return True
+
+        def miller_rabin(n: int) -> bool:
+            if n < 2:
+                return False
+            small_primes = [2, 3]
+            for p in small_primes:
+                if n == p:
+                    return True
+                if n % p == 0:
+                    return False
+
+            s = 0
+            d = n - 1
+            while d & 1 == 0:
+                d >>= 1
+                s += 1
+
+            for witness in small_primes:
+                if is_composite_witness(n, witness, d, s):
+                    return False
+            return True
+
+        for candidate in range(left, right + 1, 2):
+            if not miller_rabin(candidate):
+                continue
+
+            if prev_prime != -1:
+                diff = candidate - prev_prime
+                if diff == 2:
+                    return [prev_prime, candidate]
+                if diff < min_diff:
+                    min_diff = diff
+                    res = [prev_prime, candidate]
+
+            prev_prime = candidate
+
+        return res
+
 
 if __name__ == "__main__":
     solution = Solution()
