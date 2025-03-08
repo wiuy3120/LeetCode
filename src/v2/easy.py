@@ -309,3 +309,31 @@ class Solution:
         missing = (repeated + sum_n - sum_grid) // 2
         repeated -= missing
         return [repeated, missing]
+
+    # 2379. Minimum Recolors to Get K Consecutive Black Blocks
+    def minimumRecolors(self, blocks: str, k: int) -> int:
+        n = len(blocks)
+        if k == 1:
+            return 0 if any(block == "B" for block in blocks) else 1
+
+        min_recolors = k
+        for i in range(n - k + 1):
+            recolors = sum(1 for j in range(i, i + k) if blocks[j] != "B")
+            min_recolors = min(min_recolors, recolors)
+
+        return min_recolors
+
+    def minimumRecolors(self, blocks: str, k: int) -> int:
+        n = len(blocks)
+        if k == 1:
+            return 0 if any(block == "B" for block in blocks) else 1
+
+        last_num_recolors = sum(1 for block in blocks[:k] if block != "B")
+        min_recolors = last_num_recolors
+        for i in range(k, n):
+            last_num_recolors = (
+                last_num_recolors - (blocks[i - k] != "B") + (blocks[i] != "B")
+            )
+            min_recolors = min(min_recolors, last_num_recolors)
+
+        return min_recolors
