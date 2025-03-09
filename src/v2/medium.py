@@ -1784,6 +1784,35 @@ class Solution:
 
         return res
 
+    # 3208. Alternating Groups II
+    def numberOfAlternatingGroups(self, colors: List[int], k: int) -> int:
+        n = len(colors)
+        cur_alt_len = 1
+        alt_groups = 0
+
+        color_circle = colors + colors[: k - 1]
+        for i in range(1, n + k - 1):
+            if color_circle[i] != color_circle[i - 1]:
+                cur_alt_len += 1
+            else:
+                cur_alt_len = 1
+            alt_groups += cur_alt_len >= k
+        return alt_groups
+
+    def numberOfAlternatingGroups(self, colors: List[int], k: int) -> int:
+        n = len(colors)
+        break_points = [i for i in range(n - 1) if colors[i] == colors[i + 1]]
+        if colors[0] == colors[-1]:
+            break_points.append(n - 1)
+        if len(break_points) == 0:
+            return n
+        break_points.append(n + break_points[0])
+
+        return sum(
+            max(0, break_points[i + 1] - break_points[i] - k + 1)
+            for i in range(len(break_points) - 1)
+        )
+
 
 if __name__ == "__main__":
     solution = Solution()
