@@ -1,5 +1,6 @@
 # pyright: reportRedeclaration=false
 import bisect
+from calendar import c
 import math
 import operator
 import random
@@ -1812,6 +1813,47 @@ class Solution:
             max(0, break_points[i + 1] - break_points[i] - k + 1)
             for i in range(len(break_points) - 1)
         )
+
+    # 1358. Number of Substrings Containing All Three Characters
+    def numberOfSubstrings(self, s: str) -> int:
+        res = lo = 0
+        counter = {c: 0 for c in "abc"}
+        for hi in range(len(s)):
+            counter[s[hi]] += 1
+            while all(counter.values()):
+                counter[s[lo]] -= 1
+                lo += 1
+            res += lo
+        return res
+
+    def numberOfSubstrings(self, s: str) -> int:
+        n = len(s)
+        res = lo = 0
+        counter = defaultdict(int)
+        i = 0
+        for i in range(n):
+            counter[s[i]] += 1
+            if len(counter) == 3:
+                break
+        if i == n - 1 and len(counter) < 3:
+            return 0
+        counter[s[i]] -= 1
+        for hi in range(i, n):
+            counter[s[hi]] += 1
+            while counter[s[lo]] > 1:
+                counter[s[lo]] -= 1
+                lo += 1
+            res += lo + 1
+        return res
+
+    def numberOfSubstrings(self, s: str) -> int:
+        n = len(s)
+        last_pos = [-1, -1, -1]
+        res = 0
+        for i in range(n):
+            last_pos[ord(s[i]) - ord("a")] = i
+            res += 1 + min(last_pos)
+        return res
 
 
 if __name__ == "__main__":
