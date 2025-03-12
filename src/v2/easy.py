@@ -337,3 +337,16 @@ class Solution:
             min_recolors = min(min_recolors, last_num_recolors)
 
         return min_recolors
+
+    # 2529. Maximum Count of Positive Integer and Negative Integer
+    def maximumCount(self, nums: List[int]) -> int:
+        return max(
+            sum(1 for num in nums if num > 0),
+            sum(1 for num in nums if num < 0),
+        )
+
+    def maximumCount(self, nums: List[int]) -> int:
+        return max(
+            bisect.bisect_left(nums, 0),
+            len(nums) - bisect.bisect_right(nums, 0),
+        )
