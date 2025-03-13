@@ -1855,6 +1855,74 @@ class Solution:
             res += 1 + min(last_pos)
         return res
 
+    # 3356. Zero Array Transformation II
+    def minZeroArray(self, nums: List[int], queries: List[List[int]]) -> int:
+        n = len(nums)
+
+        def can_make_zero_array(k):
+            diff: List[int] = [0] * (n + 1)
+
+            for i in range(k):
+                left, right, val = queries[i]
+                diff[left] += val
+                diff[right + 1] -= val
+
+            curr_val = 0
+            for i in range(n):
+                curr_val += diff[i]
+                if curr_val < nums[i]:
+                    return False
+
+            return True
+
+        if all(x == 0 for x in nums):
+            return 0
+
+        left, right = 1, len(queries)
+
+        if not can_make_zero_array(right):
+            return -1
+
+        while left < right:
+            mid = left + (right - left) // 2
+
+            if can_make_zero_array(mid):
+                right = mid
+            else:
+                left = mid + 1
+
+        return left
+
+    def minZeroArray(self, nums: List[int], queries: List[List[int]]) -> int:
+        n = len(nums)
+        m = len(queries)
+
+        # you have a queue of queries in sorted order
+        # only add them into the delta if you need to
+        delta = [0] * (n + 1)
+        q = queries[::-1]
+
+        cur = 0
+
+        for i, x in enumerate(nums):
+            cur += delta[i]
+
+            # keep accepting queries until you are able to satisfy the constraint at a[i]
+            while q and cur < x:
+                left, right, height = q.pop()
+
+                if right >= i:
+                    if left > i:
+                        delta[left] += height
+                    else:  # l <= i
+                        cur += height
+                    delta[right + 1] -= height
+
+            if cur < x:
+                return -1
+
+        return m - len(q)
+
 
 if __name__ == "__main__":
     solution = Solution()
