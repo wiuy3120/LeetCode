@@ -1,6 +1,7 @@
 # pyright: reportRedeclaration=false
 import bisect
 from calendar import c
+import enum
 import math
 import operator
 import random
@@ -1922,6 +1923,28 @@ class Solution:
                 return -1
 
         return m - len(q)
+
+    # 2560. House Robber IV
+    def minCapability(self, nums: List[int], k: int) -> int:
+        def is_valid(capability: int) -> bool:
+            count = 0
+            skip = False
+            for num in nums:
+                if skip:
+                    skip = False
+                elif num <= capability:
+                    count += 1
+                    skip = True
+            return count >= k
+
+        lo, hi = min(nums), max(nums)
+        while lo < hi:
+            mid = (hi + lo) // 2
+            if is_valid(mid):
+                hi = mid
+            else:
+                lo = mid + 1
+        return lo
 
 
 if __name__ == "__main__":
