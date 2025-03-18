@@ -1946,6 +1946,17 @@ class Solution:
                 lo = mid + 1
         return lo
 
+    # 2401. Longest Nice Subarray
+    def longestNiceSubarray(self, nums: List[int]) -> int:
+        max_len, cur_and, left = 0, 0, 0
+        for right in range(len(nums)):
+            while cur_and & nums[right] != 0:
+                cur_and ^= nums[left]
+                left += 1
+            cur_and |= nums[right]
+            max_len = max(max_len, right - left + 1)
+        return max_len
+
 
 if __name__ == "__main__":
     solution = Solution()
