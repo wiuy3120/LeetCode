@@ -1957,6 +1957,34 @@ class Solution:
             max_len = max(max_len, right - left + 1)
         return max_len
 
+    # 3191. Minimum Operations to Make Binary Array Elements Equal to One I
+    def minOperations(self, nums: List[int]) -> int:
+        min_ops = 0
+        for i in range(len(nums) - 2):
+            if nums[i] == 1:
+                continue
+            min_ops += 1
+            nums[i + 1] ^= 1
+            nums[i + 2] ^= 1
+        if nums[-2] == 0 or nums[-1] == 0:
+            return -1
+        return min_ops
+
+    def minOperations(self, nums: List[int]) -> int:
+        min_ops = 0
+        ops_next = ops_next_next = 0
+        for num in nums[:-2]:
+            if num ^ ops_next:
+                ops_next = ops_next_next
+                ops_next_next = 0
+            else:
+                min_ops += 1
+                ops_next = ops_next_next ^ 1
+                ops_next_next = 1
+        if nums[-2] ^ ops_next and nums[-1] ^ ops_next_next:
+            return min_ops
+        return -1
+
 
 if __name__ == "__main__":
     solution = Solution()
