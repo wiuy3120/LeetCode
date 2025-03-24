@@ -1908,7 +1908,8 @@ class Solution:
         for i, x in enumerate(nums):
             cur += delta[i]
 
-            # keep accepting queries until you are able to satisfy the constraint at a[i]
+            # keep accepting queries until you are able to
+            # satisfy the constraint at a[i]
             while q and cur < x:
                 left, right, height = q.pop()
 
@@ -1957,6 +1958,7 @@ class Solution:
             max_len = max(max_len, right - left + 1)
         return max_len
 
+    # [fav]
     # 3191. Minimum Operations to Make Binary Array Elements Equal to One I
     def minOperations(self, nums: List[int]) -> int:
         min_ops = 0
@@ -1984,6 +1986,98 @@ class Solution:
         if nums[-2] ^ ops_next and nums[-1] ^ ops_next_next:
             return min_ops
         return -1
+
+    # 2115. Find All Possible Recipes from Given Supplies
+    def findAllRecipes(
+        self,
+        recipes: List[str],
+        ingredients: List[List[str]],
+        supplies: List[str],
+    ) -> List[str]:
+        indeg = defaultdict(int)
+        graph = defaultdict(list)
+        for recipe, ingredient in zip(recipes, ingredients):
+            indeg[recipe] = len(ingredient)
+            for i in ingredient:
+                graph[i].append(recipe)
+
+        ans = []
+        queue = deque(supplies)
+        recipe_set = set(recipes)
+        while queue:
+            x = queue.popleft()
+            if x in recipe_set:
+                ans.append(x)
+            for xx in graph[x]:
+                indeg[xx] -= 1
+                if indeg[xx] == 0:
+                    queue.append(xx)
+        return ans
+
+    def findAllRecipes(
+        self,
+        recipes: List[str],
+        ingredients: List[List[str]],
+        supplies: List[str],
+    ) -> List[str]:
+        # Convert supplies list to a set for fast lookup.
+        supply_set = set(supplies)
+
+        # Build a graph mapping each ingredient (which might be a recipe)
+        # to the list of recipes that depend on it.
+        graph = defaultdict(list)
+
+        # indegree will count, for each recipe, how many ingredients
+        # are still missing (i.e. not available yet).
+        in_degree = {recipe: 0 for recipe in recipes}
+
+        # For each recipe, check each required ingredient.
+        # If an ingredient is not available initially,
+        # then the recipe must wait for it.
+        for i, recipe in enumerate(recipes):
+            for ing in ingredients[i]:
+                # If the ingredient is not in the initial supplies,
+                # then recipe depends on it (either produced by another recipe
+                # or it might never be available).
+                if ing not in supply_set:
+                    in_degree[recipe] += 1
+                    graph[ing].append(recipe)
+
+        # Start a queue with all recipes that can be made immediately
+        # (no missing ingredients).
+        queue = deque()
+        for recipe in recipes:
+            if in_degree[recipe] == 0:
+                queue.append(recipe)
+
+        result = []
+        # Process recipes in a BFS manner.
+        while queue:
+            curr_recipe = queue.popleft()
+            result.append(curr_recipe)
+
+            # Once a recipe is made, it can serve as an ingredient.
+            supply_set.add(curr_recipe)
+
+            # Look at every recipe that depends on the current recipe.
+            for dependent in graph[curr_recipe]:
+                in_degree[dependent] -= 1
+                # If all ingredients for the dependent recipe
+                # are now available, it can be made.
+                if in_degree[dependent] == 0:
+                    queue.append(dependent)
+
+        return result
+
+    # 3169. Count Days Without Meetings
+    def countDays(self, days: int, meetings: List[List[int]]) -> int:
+        count = end = 0
+        for meeting in sorted(meetings):
+            if meeting[0] > end + 1:
+                count += meeting[0] - end - 1
+            end = max(end, meeting[1])
+        count += days - end
+        return count
 
 
 if __name__ == "__main__":
