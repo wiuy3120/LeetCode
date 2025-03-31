@@ -2079,6 +2079,23 @@ class Solution:
         count += days - end
         return count
 
+    # 2551. Put Marbles in Bags
+    def putMarbles(self, weights: List[int], k: int) -> int:
+        scores = sorted(
+            [weights[i] + weights[i + 1] for i in range(len(weights) - 1)]
+        )
+        min_score = sum(scores[: k - 1])
+        max_score = sum(scores[-k + 1 :])
+        return max_score - min_score
+
+    def putMarbles(self, weights: List[int], k: int) -> int:
+        if len(weights) == k or k == 1:
+            return 0
+        sorted_scores = sorted(
+            [weights[i] + weights[i + 1] for i in range(len(weights) - 1)]
+        )
+        return sum(sorted_scores[-k + 1 :]) - sum(sorted_scores[: k - 1])
+
 
 if __name__ == "__main__":
     solution = Solution()
