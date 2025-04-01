@@ -2096,6 +2096,23 @@ class Solution:
         )
         return sum(sorted_scores[-k + 1 :]) - sum(sorted_scores[: k - 1])
 
+    # 2140. Solving Questions With Brainpower
+    def mostPoints(self, questions: List[List[int]]) -> int:
+        max_point = 0
+        dp = [0] * (len(questions))
+        for i in range(-1, -len(questions) - 1, -1):
+            max_point = max(
+                max_point,
+                questions[i][0]
+                + (
+                    dp[i + questions[i][1] + 1]
+                    if i + questions[i][1] + 1 < 0
+                    else 0
+                ),
+            )
+            dp[i] = max_point
+        return max_point
+
 
 if __name__ == "__main__":
     solution = Solution()
