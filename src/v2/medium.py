@@ -2113,6 +2113,22 @@ class Solution:
             dp[i] = max_point
         return max_point
 
+    # 2873. Maximum Value of an Ordered Triplet I
+    def maximumTripletValue(self, nums: List[int]) -> int:
+        min_num = nums[0]
+        max_num = nums[0]
+        max_triplet_value = 0
+        min_diff = max_diff = 0
+        for num in nums:
+            max_triplet_value = max(
+                max_triplet_value, min_diff * num, max_diff * num
+            )
+            min_diff = min(min_diff, min_num - num)
+            max_diff = max(max_diff, max_num - num)
+            min_num = min(min_num, num)
+            max_num = max(max_num, num)
+        return max_triplet_value
+
 
 if __name__ == "__main__":
     solution = Solution()
