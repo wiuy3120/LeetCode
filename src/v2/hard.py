@@ -2,12 +2,13 @@
 import bisect
 import math
 import random
+import re
 from collections import Counter, defaultdict, deque
 from functools import reduce
 from heapq import heapify, heappop, heappush, heappushpop, heapreplace, nlargest
 from itertools import accumulate
 from typing import Deque, Dict, List, Optional, Set, Tuple
-import re
+
 from sortedcontainers import SortedList
 
 from utils import (
@@ -401,3 +402,48 @@ class Solution:
             return node
 
         return _dfs(0)
+
+    # [fav]
+    # 2999. Count the Number of Powerful Integers
+    def numberOfPowerfulInt(
+        self, start: int, finish: int, limit: int, s: str
+    ) -> int:
+        limit_str = str(limit)
+        len_s = len(s)
+
+        start_prefix_str = ""
+        is_limit_exceeded = False
+        for c in str(start)[:-len_s]:
+            if is_limit_exceeded:
+                start_prefix_str += limit_str
+                continue
+            if c <= limit_str:
+                start_prefix_str += c
+                continue
+            is_limit_exceeded = True
+            start_prefix_str += limit_str
+        start_prefix = (
+            0
+            if start_prefix_str == ""
+            else int(start_prefix_str, base=limit + 1)
+        )
+        start_prefix += 1 if int(start_prefix_str + s) < start else 0
+
+        finish_prefix_str = ""
+        is_limit_exceeded = False
+        for c in str(finish)[:-len_s]:
+            if is_limit_exceeded:
+                finish_prefix_str += limit_str
+                continue
+            if c <= limit_str:
+                finish_prefix_str += c
+                continue
+            is_limit_exceeded = True
+            finish_prefix_str += limit_str
+        finish_prefix = (
+            0
+            if finish_prefix_str == ""
+            else int(finish_prefix_str, base=limit + 1)
+        )
+        finish_prefix += 1 if int(finish_prefix_str + s) > finish else 0
+        return finish_prefix - start_prefix + 1
