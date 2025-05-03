@@ -2129,6 +2129,32 @@ class Solution:
             max_num = max(max_num, num)
         return max_triplet_value
 
+    # 1007. Minimum Domino Rotations For Equal Row
+    def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
+        n = len(tops)
+        counter = Counter()
+        top_counter = Counter()
+        bot_counter = Counter()
+        for top, bot in zip(tops, bottoms):
+            if top == bot:
+                counter[top] += 1
+                continue
+            counter[top] += 1
+            counter[bot] += 1
+            top_counter[top] += 1
+            bot_counter[bot] += 1
+        for num in range(1, 7):
+            if counter[num] == n:
+                return min(top_counter[num], bot_counter[num])
+        return -1
+
+    def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
+        n = len(tops)
+        for candidate in (tops[0], bottoms[0]):
+            if all(candidate in pair for pair in zip(tops, bottoms)):
+                return n - max(tops.count(candidate), bottoms.count(candidate))
+        return -1
+
 
 if __name__ == "__main__":
     solution = Solution()
