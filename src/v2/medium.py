@@ -1,6 +1,5 @@
 # pyright: reportRedeclaration=false
 import bisect
-from calendar import c
 import enum
 import math
 import operator
@@ -2154,6 +2153,26 @@ class Solution:
             if all(candidate in pair for pair in zip(tops, bottoms)):
                 return n - max(tops.count(candidate), bottoms.count(candidate))
         return -1
+
+    # 1128. Number of Equivalent Domino Pairs
+    def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
+        counter = Counter()
+        num_pairs = 0
+        for domino in dominoes:
+            pair = tuple(sorted(domino))
+            num_pairs += counter[pair]
+            counter[pair] += 1
+        return num_pairs
+
+    def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
+        counter = Counter(tuple(sorted(domino)) for domino in dominoes)
+        return sum(count * (count - 1) // 2 for count in counter.values())
+
+    def numEquivDominoPairs(self, dominoes: List[List[int]]) -> int:
+        counter = Counter(
+            x * 10 + y if x >= y else y * 10 + x for x, y in dominoes
+        )
+        return sum(count * (count - 1) // 2 for count in counter.values())
 
 
 if __name__ == "__main__":
